@@ -1,5 +1,5 @@
-import connectMongo from '../../../lib/mongodb';
-import Overview from '../../../models/Overview';
+import connectMongo from '../../lib/mongodb';
+import Overview from '../../models/Overview';
 
 export default async function handler(req, res) {
   await connectMongo();
