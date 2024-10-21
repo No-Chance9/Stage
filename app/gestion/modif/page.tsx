@@ -1,7 +1,6 @@
-import { SidebarUse } from "./components/sidebarUse";
+import { SidebarUse } from "@/app/components/sidebarUse";
 
-
-export default function Home() {
+export default function ModifUser() {
   return (
     <div >
       <section>

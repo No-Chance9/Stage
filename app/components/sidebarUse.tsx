@@ -124,7 +124,7 @@ export const LogoIcon = () => {
 };
 
 // Dummy dashboard component with content
-const Dashboard = () => {
+export const Dashboard = () => {
     return (
 
         <div className="flex flex-wrap h-screen w-max ">

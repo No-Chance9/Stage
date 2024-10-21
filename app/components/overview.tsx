@@ -66,63 +66,7 @@ export default function Overview() {
 
 
 
-// import { useEffect } from 'react';
-// import connectToDatabase from '@/lib/mongodb';
-// import DataModel from '../models/Data';
 
-// export default function Overview() {
-//     const data = [
-//         {
-//             title: "Total Customers",
-//             value: "21.978",
-//             percentage: 15,
-//         },
-//         {
-//             title: "Active Customers",
-//             value: "10.432",
-//             percentage: -43,
-//         },
-//         {
-//             title: "Total Profit",
-//             value: "$32.978,32",
-//             percentage: 59,
-//         },
-//         {
-//             title: "Total Expense",
-//             value: "$23.978,42",
-//             percentage: -13,
-//         },
-//     ];
 
-//     useEffect(() => {
-//         async function saveData() {
-//             try {
-//                 const db = await connectToDatabase();
-//                 // Vider la collection (optionnel)
-//                 await DataModel.deleteMany({});
-//                 // Enregistrer chaque élément
-//                 await DataModel.insertMany(data);
-//                 console.log('Données enregistrées avec succès !');
-//             } catch (error) {
-//                 console.error('Erreur lors de l\'enregistrement des données :', error);
-//             }
-//         }
 
-//         saveData();
-//     }, []);
-
-//     return (
-//         <div className="flex flex-row gap-2">
-//             {data.map((item, index) => (
-//                 <div key={index} className="bg-white shadow-md rounded-lg p-6 w-64">
-//                     <h2 className="text-xl font-bold mb-4">{item.title}</h2>
-//                     <p className="text-3xl font-semibold">{item.value}</p>
-//                     <p className={`${item.percentage < 0 ? 'text-red-500' : 'text-green-500'} mt-2`}>
-//                         {item.percentage}% From the last month
-//                     </p>
-//                 </div>
-//             ))}
-//         </div>
-//     );
-// }
 
