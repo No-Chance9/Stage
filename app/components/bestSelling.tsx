@@ -4,10 +4,10 @@ import 'chart.js/auto';
 // Module 1: Best Selling Products
 export const BestSellingProducts = () => {
     const products = [
-        { name: 'Revenue', price: '$400', sold: '0 pcs', status: 'Out of Stock', statusColor: 'text-red-600' },
-        { name: 'Revenue', price: '$185', sold: '12 pcs', status: 'In Stock', statusColor: 'text-green-600' },
-        { name: 'Revenue', price: '$150', sold: '36 pcs', status: 'Low quantity', statusColor: 'text-yellow-600' },
-        { name: 'Revenue', price: '$132', sold: '19 pcs', status: 'Low quantity', statusColor: 'text-yellow-600' },
+        { name: 'Sneaker', price: '$400', sold: '0 pcs', status: 'Out of Stock', statusColor: 'text-red-600' },
+        { name: 'Socks', price: '$185', sold: '12 pcs', status: 'In Stock', statusColor: 'text-green-600' },
+        { name: 'Shirts', price: '$150', sold: '36 pcs', status: 'Low quantity', statusColor: 'text-yellow-600' },
+        { name: 'Hats', price: '$132', sold: '19 pcs', status: 'Low quantity', statusColor: 'text-yellow-600' },
     ];
 
     return (

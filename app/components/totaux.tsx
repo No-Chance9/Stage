@@ -24,21 +24,21 @@ export default function Overview() {
         },
     ];
 
-    const exportToCSV = () => {
-        const csvRows = [
-            ["Title", "Value", "Percentage"],
-            ...data.map(item => [item.title, item.value, item.percentage])
-        ];
+    // const exportToCSV = () => {
+    //     const csvRows = [
+    //         ["Title", "Value", "Percentage"],
+    //         ...data.map(item => [item.title, item.value, item.percentage])
+    //     ];
 
-        const csvContent = csvRows.map(e => e.join(",")).join("\n");
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        saveAs(blob, 'dashboard_data.csv');
-    };
+    //     const csvContent = csvRows.map(e => e.join(",")).join("\n");
+    //     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    //     saveAs(blob, 'dashboard_data.csv');
+    // };
 
     return (
         <div className="flex flex-col gap-4">
             <button 
-                onClick={exportToCSV} 
+                // onClick={exportToCSV} 
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg self-start mb-4"
             >
                 Download CSV

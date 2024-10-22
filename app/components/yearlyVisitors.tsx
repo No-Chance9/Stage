@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
@@ -32,12 +33,12 @@ export const YearlyVisitorsChart = () => {
 };
 
 // Main Component that uses all three modules
-export default function Dashboard() {
+export default function Three() {
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            <BestSellingProducts />
+        <div className=" grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
             <CustomerGrowthChart />
             <YearlyVisitorsChart />
+            <BestSellingProducts />
         </div>
     );
 }

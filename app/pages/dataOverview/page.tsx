@@ -1,10 +1,17 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import connectMongo from '../../../lib/mongodb';
 import Overview from '../../../models/Overview';
 
-export default async function handler(req, res) {
+interface DataItem {
+  title: string;
+  value: string;
+  percentage: number;
+}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectMongo();
 
-  const data = [
+  const data: DataItem[] = [
     {
       title: "Total Customers",
       value: "21.978",
