@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Header from "./header";
-import Overview from "./totaux";
+import Totaux from "./totaux";
 import '../style/styles.css'
 import { CustomerGrowthChart } from "./customerGrowth";
 import { YearlyVisitorsChart } from "./yearlyVisitors";
@@ -59,7 +59,7 @@ export const SidebarUse = ({children}: { children: ReactNode }) => {
         <div
             className={cn(
                 "rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-white w-full flex-1 max-w-7xl mx-auto border border-neutral-200 dark:border-neutral-700  ",
-                "h-[130vh]" // for your use case, use `h-screen` instead of `h-[60vh]`
+                "h-full" // for your use case, use `h-screen` instead of `h-[60vh]`
             )}
         >
             <Sidebar open={open} setOpen={setOpen} animate={false}>
@@ -154,7 +154,7 @@ export const LogoIcon = () => {
 //                         <div
 //                             key={"first-array"}
 //                             className="h-max w-max rounded-lg bg-gray-100 dark:bg-neutral-800 "
-//                         ><Overview /></div>
+//                         ><Totaux /></div>
 //                     {/* ))} */}
 //                 </div>
 //                 <div className="grid grid-col-3 grid-row-2 w-full gap-6 p-4 flex-1 overflow-hidden">

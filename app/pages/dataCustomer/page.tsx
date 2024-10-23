@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import connectMongo from '../../../lib/mongodb';
+import { connectDB } from '@/lib/mongodb';
 import Customer from '../../../models/Customer';
 
 interface DataItem {
@@ -10,7 +10,7 @@ interface DataItem {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    await connectMongo();
+    await connectDB();
 
     const data: DataItem[] = [
         {

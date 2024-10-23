@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import ButtonGroup from './buttonGroup';
-import Overview from './totaux';
+import Totaux from './totaux';
 import { CustomerGrowthChart } from './customerGrowth';
 import { YearlyVisitorsChart } from './yearlyVisitors';
 import { BestSellingProducts } from './bestSelling';
@@ -11,7 +11,7 @@ export const Dashboard = () => {
     return (
         <div className="flex flex-wrap   ">
             <div className="grid grid-cols-10 ">
-                <h1 className="font-bold p-4 ">Overview</h1>
+                <h1 className="font-bold p-4 ">Totaux</h1>
                 <div className=" col-start-7 p-4 col-end-9">
                     <ButtonGroup />
                 </div>
@@ -27,7 +27,7 @@ export const Dashboard = () => {
                         key={"first-array"}
                         className="h-max w-full rounded-lg bg-gray-100 dark:bg-neutral-800 "
                     >
-                        <Overview />
+                        <Totaux />
                     </div>
                     {/* ))} */}
                 </div>

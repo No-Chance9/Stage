@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/pages/dataOverview/page.tsx", "lib/mongodb.js", "models/Overview.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/pages/dataOverview/page.tsx", "lib/mongodb.ts", "models/Overview.ts"],
   "exclude": ["node_modules"]
 }

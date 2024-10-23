@@ -1,39 +1,36 @@
-import { saveAs } from 'file-saver';
+export default async function Totaux() {
 
-export default function Overview() {
-    const data = [
-        {
-            title: "Total Customers",
-            value: "21.978",
-            percentage: 15,
-        },
-        {
-            title: "Active Customers",
-            value: "10.432",
-            percentage: -43,
-        },
-        {
-            title: "Total Profit",
-            value: "$32.978,32",
-            percentage: 59,
-        },
-        {
-            title: "Total Expense",
-            value: "$23.978,42",
-            percentage: -13,
-        },
-    ];
+    const fetchValues = async () => {
+        const res = await fetch("http://localhost:3000/api/values");
+        const values = await res.json();
+        return values;
+    }
 
-    // const exportToCSV = () => {
-    //     const csvRows = [
-    //         ["Title", "Value", "Percentage"],
-    //         ...data.map(item => [item.title, item.value, item.percentage])
-    //     ];
+    const values = await fetchValues();
 
-    //     const csvContent = csvRows.map(e => e.join(",")).join("\n");
-    //     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    //     saveAs(blob, 'dashboard_data.csv');
-    // };
+    // const data = [
+    //     {
+    //         title: "Total Customers",
+    //         value: "",
+    //         percentage: 15,
+    //     },
+    //     {
+    //         title: "Active Customers",
+    //         value: "10.432",
+    //         percentage: -43,
+    //     },
+    //     {
+    //         title: "Total Profit",
+    //         value: "$32.978,32",
+    //         percentage: 59,
+    //     },
+    //     {
+    //         title: "Total Expense",
+    //         value: "$23.978,42",
+    //         percentage: -13,
+    //     },
+    // ];
+
 
     return (
         <div className="flex flex-col gap-4">
@@ -44,7 +41,7 @@ export default function Overview() {
                 Download CSV
             </button>
             <div className="flex flex-row gap-2">
-                {data.map((item, index) => (
+                {values.map((item, index) => (
                     <div key={index} className="bg-white shadow-md rounded-lg p-6 w-64">
                         <h2 className="text-xl font-bold mb-4"><img src="/images/decreasing.svg" alt="" /> {item.title}</h2>
                         <p className="text-3xl font-semibold">{item.value}</p>
