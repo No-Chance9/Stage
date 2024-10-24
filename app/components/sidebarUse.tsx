@@ -16,7 +16,7 @@ import Totaux from "./totaux";
 import '../style/styles.css'
 import { CustomerGrowthChart } from "./customerGrowth";
 import { YearlyVisitorsChart } from "./yearlyVisitors";
-import { BestSellingProducts } from "./bestSelling";
+import  BestSelling  from "./bestSelling";
 import ButtonGroup from "./buttonGroup";
 import ButtonDl from "./buttonDownload";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
@@ -27,14 +27,14 @@ export const SidebarUse = ({children}: { children: ReactNode }) => {
     const links = [
         {
             label: "Tableaux de bord",
-            href: "#",
+            href: "/",
             icon: (
                 <IconBrandTabler className="text-icon  dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
         },
         {
             label: "Gestion des utilisateurs",
-            href: "#",
+            href: "/gestion/modif",
             icon: (
                 <IconUserBolt className="text-icon hover:text-sky-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
@@ -172,7 +172,7 @@ export const LogoIcon = () => {
 //                     <div
 //                         key={"second-array"}
 //                         className=" rounded-lg row-start-2 col-start-1 col-end-4 bg-gray-100 dark:bg-neutral-800 flex-1 "
-//                     ><BestSellingProducts />
+//                     ><BestSelling />
 //                     </div>
 //                     {/* ))} */}
 //                 </div>

@@ -1,14 +1,23 @@
 import React from 'react';
 import 'chart.js/auto';
+import { useEffect, useState } from "react";
 
-// Module 1: Best Selling Products
-export const BestSellingProducts = () => {
-    const products = [
-        { name: 'Sneaker', price: '$400', sold: '0 pcs', status: 'Out of Stock', statusColor: 'text-red-600' },
-        { name: 'Socks', price: '$185', sold: '12 pcs', status: 'In Stock', statusColor: 'text-green-600' },
-        { name: 'Shirts', price: '$150', sold: '36 pcs', status: 'Low quantity', statusColor: 'text-yellow-600' },
-        { name: 'Hats', price: '$132', sold: '19 pcs', status: 'Low quantity', statusColor: 'text-yellow-600' },
-    ];
+export default function BestSelling() {
+    const [values, setValues] = useState<any[]>([]);
+
+    const fetchValues = async () => {
+        try {
+            const res = await fetch("/api/bestSellings");
+            const data = await res.json();
+            setValues(data);
+        } catch (error) {
+            console.error("Error fetching bestSelling:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchValues();
+    }, []);
 
     return (
         <div className="bg-white shadow-md rounded-lg p-5">
@@ -27,7 +36,7 @@ export const BestSellingProducts = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product, index) => (
+                        {values.map((product, index) => (
                             <tr key={index}>
                                 <td className="p-2">{product.name}</td>
                                 <td className="p-2">{product.price}</td>

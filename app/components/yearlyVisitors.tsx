@@ -2,17 +2,45 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
-import { BestSellingProducts } from './bestSelling';
+import BestSelling from './bestSelling';
 import { CustomerGrowthChart } from './customerGrowth';
+import { useEffect, useState } from "react";
+
 
 // Module 3: Yearly Visitors Pie Chart
 export const YearlyVisitorsChart = () => {
+
+    const [chartData, setChartData] = useState<{
+                                                labels: string[],
+                                                visitors: number[],
+                                            }>({
+                                                labels: [],
+                                                visitors: [],
+                                            })
+
+    const fetchValues = async () => {
+        try {
+            const res = await fetch("/api/yearlies");
+            const data = await res.json();
+
+            const labels = data.map((item: any) => item.label);
+            const visitors = data.map((item: any) => item.value);
+
+            setChartData({ labels, visitors });
+        } catch (error) {
+            console.error("Error fetching customers:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchValues();
+    }, []);
     const data = {
-        labels: ['Amazon', 'Alibaba', 'Ebay', 'Shopify'],
+        labels: chartData.labels,
         datasets: [
             {
                 label: 'Visitors',
-                data: [2100, 1000, 1900, 15100],
+                data: chartData.visitors,
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.6)',
                     'rgba(255, 206, 86, 0.6)',
@@ -38,7 +66,7 @@ export default function Three() {
         <div className=" grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
             <CustomerGrowthChart />
             <YearlyVisitorsChart />
-            <BestSellingProducts />
+            <BestSelling />
         </div>
     );
 }

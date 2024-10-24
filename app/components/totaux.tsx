@@ -1,36 +1,22 @@
-export default async function Totaux() {
+import { useEffect, useState } from "react";
+import Image from 'next/image';
+
+export default function Totaux() {
+    const [values, setValues] = useState<any[]>([]);
 
     const fetchValues = async () => {
-        const res = await fetch("http://localhost:3000/api/values");
-        const values = await res.json();
-        return values;
-    }
+        try {
+            const res = await fetch("/api/overviews");
+            const data = await res.json();
+            setValues(data);
+        } catch (error) {
+            console.error("Error fetching overviews:", error);
+        }
+    };
 
-    const values = await fetchValues();
-
-    // const data = [
-    //     {
-    //         title: "Total Customers",
-    //         value: "",
-    //         percentage: 15,
-    //     },
-    //     {
-    //         title: "Active Customers",
-    //         value: "10.432",
-    //         percentage: -43,
-    //     },
-    //     {
-    //         title: "Total Profit",
-    //         value: "$32.978,32",
-    //         percentage: 59,
-    //     },
-    //     {
-    //         title: "Total Expense",
-    //         value: "$23.978,42",
-    //         percentage: -13,
-    //     },
-    // ];
-
+    useEffect(() => {
+        fetchValues();
+    }, []);
 
     return (
         <div className="flex flex-col gap-4">
@@ -43,7 +29,9 @@ export default async function Totaux() {
             <div className="flex flex-row gap-2">
                 {values.map((item, index) => (
                     <div key={index} className="bg-white shadow-md rounded-lg p-6 w-64">
-                        <h2 className="text-xl font-bold mb-4"><img src="/images/decreasing.svg" alt="" /> {item.title}</h2>
+                        <h2 className="text-xl font-bold mb-4">
+                            <Image src="/images/decreasing.svg" alt="treg" width={50} height={50} /> {item.title}
+                        </h2>
                         <p className="text-3xl font-semibold">{item.value}</p>
                         <p className={`${item.percentage < 0 ? 'text-red-500' : 'text-green-500'} mt-2`}>
                             {item.percentage}% From the last month
@@ -54,16 +42,3 @@ export default async function Totaux() {
         </div>
     );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -3,7 +3,7 @@ import Overview from "@/models/Overview";
 import { error } from "console";
 import { NextResponse } from "next/server";
 
-export async function GET(){ 
+export async function GET(){
     await connectDB();
     
     try{

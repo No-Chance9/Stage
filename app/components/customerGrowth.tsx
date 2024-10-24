@@ -1,32 +1,67 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
+import { useEffect, useState } from "react";
 
 // Module 2: Customer Growth Bar Chart
 export const CustomerGrowthChart = () => {
+    
+    const [chartData, setChartData] = useState<{
+                                    labels: string[],
+                                    menCustomer: number[],
+                                    womenCustomer: number[],
+                                    newCustomer: number[]
+                                }>({
+                                    labels: [],
+                                    menCustomer: [],
+                                    womenCustomer: [],
+                                    newCustomer: []
+                                });
+
+    const fetchValues = async () => {
+        try {
+            const res = await fetch("/api/customers");
+            const data = await res.json();
+            
+            const labels = data.map((item: any) => item.month);
+            const menCustomer = data.map((item: any) => item.menCustomer);
+            const womenCustomer = data.map((item: any) => item.womenCustomer);
+            const newCustomer = data.map((item: any) => item.newCustomer);
+            
+            setChartData({labels, menCustomer, womenCustomer, newCustomer });
+        } catch (error) {
+            console.error("Error fetching customers:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchValues();
+    }, []);
+
+
     const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+        labels: chartData.labels,
         datasets: [
             {
                 label: 'Men Customer',
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
-                data: [15000, 10000, 12000, 27000, 15000, 30000, 14000, 9000],
+                data: chartData.menCustomer,
             },
             {
                 label: 'Women Customer',
                 backgroundColor: 'rgba(255, 99, 132, 0.6)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1,
-                data: [12000, 9000, 11000, 32000, 18000, 25000, 16000, 12000],
+                data: chartData.womenCustomer,
             },
             {
                 label: 'New Customer',
-                backgroundColor: 'rgba(45, 63, 655, 0.6)',
-                borderColor: 'rgba(45, 63, 655, 1)',
+                backgroundColor: 'rgba(199, 23, 655, 0.6)',
+                borderColor: 'rgba(199, 63, 655, 1)',
                 borderWidth: 1,
-                data: [23000, 6543, 34467, 32000, 15454, 25000, 16000, 12000],
+                data: chartData.newCustomer,
             },
         ],
     };

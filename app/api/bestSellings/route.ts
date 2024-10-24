@@ -1,13 +1,13 @@
 import { connectDB } from "@/lib/mongodb";
-import Overview from "@/models/Overview";
+import Best from "@/models/BestSelling";
 import { error } from "console";
 import { NextResponse } from "next/server";
 
-export async function GET(){ 
+export async function GET(){
     await connectDB();
     
     try{
-        const values = await Overview.find({});
+        const values = await Best.find({});
     
         return NextResponse.json(values);
 

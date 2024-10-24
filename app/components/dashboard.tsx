@@ -4,7 +4,7 @@ import ButtonGroup from './buttonGroup';
 import Totaux from './totaux';
 import { CustomerGrowthChart } from './customerGrowth';
 import { YearlyVisitorsChart } from './yearlyVisitors';
-import { BestSellingProducts } from './bestSelling';
+import BestSelling from './bestSelling';
 import ButtonDl from './buttonDownload';
 
 export const Dashboard = () => {
@@ -16,7 +16,7 @@ export const Dashboard = () => {
                     <ButtonGroup />
                 </div>
                 <div className=" justify-self-end col-start-9 p-4 col-end-11 ">
-                    <ButtonDl />
+                    <ButtonDl/>
                 </div>
                 {/* </ */}
             </div>
@@ -46,7 +46,7 @@ export const Dashboard = () => {
                     <div
                         key={"second-array"}
                         className=" rounded-lg row-start-2 col-start-1 col-end-4 bg-gray-100 dark:bg-neutral-800 flex-1 "
-                    ><BestSellingProducts />
+                    ><BestSelling />
                     </div> 
                 {/* ))} */}
                 </div>
