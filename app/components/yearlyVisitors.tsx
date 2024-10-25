@@ -61,12 +61,12 @@ export const YearlyVisitorsChart = () => {
 };
 
 // Main Component that uses all three modules
-export default function Three() {
-    return (
-        <div className=" grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-            <CustomerGrowthChart />
-            <YearlyVisitorsChart />
-            <BestSelling />
-        </div>
-    );
-}
+// export default function Three() {
+//     return (
+//         <div className=" grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
+//             {/* <CustomerGrowthChart myProp={undefined} /> */}
+//             <YearlyVisitorsChart />
+//             <BestSelling />
+//         </div>
+//     );
+// }

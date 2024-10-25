@@ -1,7 +1,7 @@
 "use client";
 import { Dashboard } from "./components/dashboard";
 import React from 'react';
-import Three from "./components/yearlyVisitors";
+// import Three from "./components/yearlyVisitors";
 import Totaux from "./components/totaux";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";

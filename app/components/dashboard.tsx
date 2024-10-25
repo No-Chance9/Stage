@@ -1,4 +1,3 @@
-"use client";
 import React from 'react';
 import ButtonGroup from './buttonGroup';
 import Totaux from './totaux';
@@ -7,7 +6,10 @@ import { YearlyVisitorsChart } from './yearlyVisitors';
 import BestSelling from './bestSelling';
 import ButtonDl from './buttonDownload';
 
-export const Dashboard = () => {
+export const Dashboard =  () => {
+
+    
+
     return (
         <div className="flex flex-wrap   ">
             <div className="grid grid-cols-10 ">
@@ -16,7 +18,7 @@ export const Dashboard = () => {
                     <ButtonGroup />
                 </div>
                 <div className=" justify-self-end col-start-9 p-4 col-end-11 ">
-                    <ButtonDl/>
+                    <ButtonDl />
                 </div>
                 {/* </ */}
             </div>
@@ -32,11 +34,11 @@ export const Dashboard = () => {
                     {/* ))} */}
                 </div>
                 <div className="grid grid-col-4 grid-row-2 w-full gap-6 p-4 flex-1 overflow-hidden">
-                {/* {[...new Array(2)].map((i) => ( */}
-                <div
+                    {/* {[...new Array(2)].map((i) => ( */}
+                    <div
                         key={"second-array"}
                         className=" rounded-lg col-start-1 col-end-3  bg-gray-100 dark:bg-neutral-800 "
-                    ><CustomerGrowthChart />
+                    ><CustomerGrowthChart  />
                     </div>
                     <div
                         key={"second-array"}
@@ -47,8 +49,8 @@ export const Dashboard = () => {
                         key={"second-array"}
                         className=" rounded-lg row-start-2 col-start-1 col-end-4 bg-gray-100 dark:bg-neutral-800 flex-1 "
                     ><BestSelling />
-                    </div> 
-                {/* ))} */}
+                    </div>
+                    {/* ))} */}
                 </div>
             </div>
         </div>

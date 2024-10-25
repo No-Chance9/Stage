@@ -1,34 +1,35 @@
+'use client';
+
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { useEffect, useState } from "react";
 
 // Module 2: Customer Growth Bar Chart
-export const CustomerGrowthChart = () => {
-    
+export const CustomerGrowthChart =  () => {
+
     const [chartData, setChartData] = useState<{
-                                    labels: string[],
-                                    menCustomer: number[],
-                                    womenCustomer: number[],
-                                    newCustomer: number[]
-                                }>({
-                                    labels: [],
-                                    menCustomer: [],
-                                    womenCustomer: [],
-                                    newCustomer: []
-                                });
+        labels: string[],
+        menCustomer: number[],
+        womenCustomer: number[],
+        newCustomer: number[]
+    }>({
+        labels: [],
+        menCustomer: [],
+        womenCustomer: [],
+        newCustomer: []
+    });
 
     const fetchValues = async () => {
         try {
             const res = await fetch("/api/customers");
             const data = await res.json();
-            
             const labels = data.map((item: any) => item.month);
             const menCustomer = data.map((item: any) => item.menCustomer);
             const womenCustomer = data.map((item: any) => item.womenCustomer);
             const newCustomer = data.map((item: any) => item.newCustomer);
-            
-            setChartData({labels, menCustomer, womenCustomer, newCustomer });
+
+            setChartData({ labels, menCustomer, womenCustomer, newCustomer });
         } catch (error) {
             console.error("Error fetching customers:", error);
         }
