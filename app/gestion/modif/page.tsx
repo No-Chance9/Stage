@@ -8,8 +8,8 @@ import { useState } from 'react';
 
 export default function UserManagementTable() {
   const users = [
-    { role: 'Admin', avatar: '/path/to/avatar1.png', email: 'theo@ziema.fr', name: 'Théo', createdAt: '05/12/2023' },
-    { role: 'Admin', avatar: '/path/to/avatar2.png', email: 'julien@ziema.fr', name: 'Julien', createdAt: '05/12/2023' },
+    { role: 'Admin', avatar: '/images/theo.svg', email: 'theo@ziema.fr', name: 'Théo', createdAt: '05/12/2023' },
+    { role: 'Admin', avatar: '/images/theo.svg', email: 'julien@ziema.fr', name: 'Julien', createdAt: '05/12/2023' },
     { role: 'Editeur', avatar: '/path/to/avatar3.png', email: 'arthur@ziema.fr', name: 'Arthur', createdAt: '05/12/2023' },
     { role: 'Observateur', avatar: '/path/to/avatar4.png', email: 'test@ziema.fr', name: 'Test', createdAt: '05/12/2023' },
     { role: 'Observateur', avatar: '/path/to/avatar5.png', email: 'test@ziema.fr', name: 'Test', createdAt: '05/12/2023' },
@@ -36,7 +36,7 @@ export default function UserManagementTable() {
           <ButtonEdit />
         </div>
       </div>
-      <div className="overflow-x-auto  m-6">
+      <div className="overflow-x-auto grid m-6">
         <div className='flex bg-white justify-between p-4'>
           <h1 className='self-center font-bold'>Modifiez vos users</h1>
           <div className='relative'>
@@ -63,12 +63,20 @@ export default function UserManagementTable() {
           <tbody>
             {users.map((user, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="p-4 text-sm text-gray-800">{user.role}</td>
-                <td className="p-4 text-sm text-gray-800">
-                  <Image src={user.avatar} alt="avatar" width={30} height={30} className="rounded-full" />
+                <td className="p-4 text-sm text-gray-800 " >
+                  <a href="/gestion/user" className='cursor-pointer hover:text-blue-500'>{user.role}</a>
                 </td>
-                <td className="p-4 text-sm text-gray-800">{user.email}</td>
-                <td className="p-4 text-sm text-gray-800">{user.name}</td>
+                <td className="p-4 text-sm text-gray-800">
+                  <a href="/gestion/user">
+                    <Image src={user.avatar} alt="avatar" width={30} height={30} className="rounded-full border hover:border-blue-500" />
+                  </a>
+                </td>
+                <td className="p-4 text-sm text-gray-800">
+                  <a className='cursor-pointer hover:text-blue-500' href="/gestion/user" >{user.email}</a>
+                </td>
+                <td className="p-4 text-sm text-gray-800">
+                  <a className='cursor-pointer hover:text-blue-500' href="/gestion/user">{user.name}</a>
+                </td>
                 <td className="p-4 text-sm text-gray-800">{user.createdAt}</td>
                 <td className="p-4 text-sm text-gray-800 flex gap-2">
                   <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
@@ -78,7 +86,7 @@ export default function UserManagementTable() {
             ))}
           </tbody>
         </table>
-        <div className="flex justify-end items-center mt-4">
+        <div className="flex  justify-self-end justify-end items-center mt-4 bg-white">
           <button
             onClick={() => handlePageChange(1)}
             disabled={currentPage === 1}

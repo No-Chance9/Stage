@@ -64,7 +64,7 @@ export const SidebarUse = ({children}: { children: ReactNode }) => {
         >
             <Sidebar open={open} setOpen={setOpen} animate={false}>
                 <SidebarBody className="justify-between gap-10 ">
-                    <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+                    <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden p-5">
                         {open ? <Logo /> : <LogoIcon />}
                         <div className="mt-8 flex flex-col gap-2">
                             {links.map((link, idx) => (
@@ -104,14 +104,13 @@ export const Logo = () => {
             href="#"
             className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
         >
-            <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
             <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="font-medium text-black dark:text-white whitespace-pre"
+                className="font-medium text-black dark:text-white whitespace-pre flex"
             >
-                Acet Labs
-                <div className="carre"></div>
+                <Image src='/images/ziema.svg' alt='' width={194} height={39}/>
+                <Image src='/images/dark:light.svg' alt='' width={32} height={32}/>
             </motion.span>
         </Link>
     );
@@ -122,7 +121,6 @@ export const LogoIcon = () => {
             href="#"
             className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
         >
-            <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
         </Link>
     );
 };
