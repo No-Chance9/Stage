@@ -6,7 +6,7 @@ import 'chart.js/auto';
 import { useEffect, useState } from "react";
 
 // Module 2: Customer Growth Bar Chart
-export const CustomerGrowthChart =  () => {
+export const CustomerGrowthChart = ( {sendDataToParent}:any ) => {
 
     const [chartData, setChartData] = useState<{
         labels: string[],
@@ -24,12 +24,18 @@ export const CustomerGrowthChart =  () => {
         try {
             const res = await fetch("/api/customers");
             const data = await res.json();
+
+            // Extract the values from the fetched data
             const labels = data.map((item: any) => item.month);
             const menCustomer = data.map((item: any) => item.menCustomer);
             const womenCustomer = data.map((item: any) => item.womenCustomer);
             const newCustomer = data.map((item: any) => item.newCustomer);
 
+            // Update chart data
             setChartData({ labels, menCustomer, womenCustomer, newCustomer });
+
+            // Pass data to parent component
+            sendDataToParent(data);
         } catch (error) {
             console.error("Error fetching customers:", error);
         }

@@ -2,7 +2,7 @@ import React from 'react';
 import 'chart.js/auto';
 import { useEffect, useState } from "react";
 
-export default function BestSelling() {
+export default function BestSelling({sendDataToParent}:any) {
     const [values, setValues] = useState<any[]>([]);
 
     const fetchValues = async () => {
@@ -10,6 +10,8 @@ export default function BestSelling() {
             const res = await fetch("/api/bestSellings");
             const data = await res.json();
             setValues(data);
+
+            sendDataToParent(data);
         } catch (error) {
             console.error("Error fetching bestSelling:", error);
         }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 
-export default function Totaux() {
+export default function Totaux({sendDataToParent}:any) {
     const [values, setValues] = useState<any[]>([]);
 
     const fetchValues = async () => {
@@ -9,6 +9,8 @@ export default function Totaux() {
             const res = await fetch("/api/overviews");
             const data = await res.json();
             setValues(data);
+
+            sendDataToParent(data)
         } catch (error) {
             console.error("Error fetching overviews:", error);
         }
@@ -20,12 +22,12 @@ export default function Totaux() {
 
     return (
         <div className="flex flex-col gap-4">
-            <button 
+            {/* <button 
                 // onClick={exportToCSV} 
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg self-start mb-4"
             >
                 Download CSV
-            </button>
+            </button> */}
             <div className="flex flex-row gap-2">
                 {values.map((item, index) => (
                     <div key={index} className="bg-white shadow-md rounded-lg p-6 w-64">

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 
 // Module 3: Yearly Visitors Pie Chart
-export const YearlyVisitorsChart = () => {
+export const YearlyVisitorsChart = ({sendDataToParent}:any) => {
 
     const [chartData, setChartData] = useState<{
                                                 labels: string[],
@@ -16,7 +16,7 @@ export const YearlyVisitorsChart = () => {
                                             }>({
                                                 labels: [],
                                                 visitors: [],
-                                            })
+                                            });
 
     const fetchValues = async () => {
         try {
@@ -27,6 +27,8 @@ export const YearlyVisitorsChart = () => {
             const visitors = data.map((item: any) => item.value);
 
             setChartData({ labels, visitors });
+
+            sendDataToParent(data);
         } catch (error) {
             console.error("Error fetching customers:", error);
         }
