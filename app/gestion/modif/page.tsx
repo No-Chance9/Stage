@@ -4,20 +4,55 @@ import Image from 'next/image';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ButtonEdit from '@/app/components/buttonEdit';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function UserManagementTable() {
-  const users = [
-    { role: 'Admin', avatar: '/images/theo.svg', email: 'theo@ziema.fr', name: 'Théo', createdAt: '05/12/2023' },
-    { role: 'Admin', avatar: '/images/theo.svg', email: 'julien@ziema.fr', name: 'Julien', createdAt: '05/12/2023' },
-    { role: 'Editeur', avatar: '/path/to/avatar3.png', email: 'arthur@ziema.fr', name: 'Arthur', createdAt: '05/12/2023' },
-    { role: 'Observateur', avatar: '/path/to/avatar4.png', email: 'test@ziema.fr', name: 'Test', createdAt: '05/12/2023' },
-    { role: 'Observateur', avatar: '/path/to/avatar5.png', email: 'test@ziema.fr', name: 'Test', createdAt: '05/12/2023' },
-    { role: 'Observateur', avatar: '/path/to/avatar5.png', email: 'test@ziema.fr', name: 'Test', createdAt: '05/12/2023' },
-    { role: 'Observateur', avatar: '/path/to/avatar5.png', email: 'test@ziema.fr', name: 'Test', createdAt: '05/12/2023' },
-    { role: 'Observateur', avatar: '/path/to/avatar5.png', email: 'test@ziema.fr', name: 'Test', createdAt: '05/12/2023' },
-    { role: 'Observateur', avatar: '/path/to/avatar5.png', email: 'test@ziema.fr', name: 'Test', createdAt: '05/12/2023' },
-  ];
+
+export default function UserManagementTable({sendDataToParent}:any) {
+
+  const [chartData, setChartData] = useState<{
+    // role: string[],
+    name: string[],
+    // avatar: string[],
+    email: string[],
+    // createdAt: Date,
+  }>({
+    // role: [],
+    name: [],
+    // avatar: [],
+    email: [],
+    // createdAt: Date,
+  });
+
+  const fetchValues = async () => {
+    try {
+      const res = await fetch("/api/users");
+      const data = await res.json();
+
+      const role = data.map((item: any) => item.role);
+      const avatar = data.map((item: any) => item.avatar);
+      const name = data.map((item: any) => item.name);
+      const email = data.map((item: any) => item.email);
+      // const createdAt = data.map((item: any) => item.createdAt);
+
+      setChartData({ name, email });
+      console.log('from register:', data)
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchValues();
+  }, []);
+
+
+  const users = chartData.name.map((name, index) => ({
+    role: 'Utilisateur', // Vous pouvez ajouter d'autres données ici si nécessaire
+    avatar: '/images/theo.svg', // Mettre un avatar par défaut ou utiliser une valeur dynamique
+    email: chartData.email[index],
+    name: name,
+    createdAt: '05/12/2023', // Vous pouvez adapter cette valeur
+  }));
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
@@ -28,6 +63,7 @@ export default function UserManagementTable() {
   };
 
   const paginatedUsers = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <>
       <div className='flex justify-between m-6 '>
@@ -64,7 +100,7 @@ export default function UserManagementTable() {
             {users.map((user, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
                 <td className="p-4 text-sm text-gray-800 " >
-                  <a href="/gestion/user" className='cursor-pointer hover:text-blue-500'>{user.role}</a>
+                  <a  href="/gestion/user" className='cursor-pointer hover:text-blue-500'>{user.role}</a>
                 </td>
                 <td className="p-4 text-sm text-gray-800">
                   <a href="/gestion/user">
@@ -72,14 +108,16 @@ export default function UserManagementTable() {
                   </a>
                 </td>
                 <td className="p-4 text-sm text-gray-800">
-                  <a className='cursor-pointer hover:text-blue-500' href="/gestion/user" >{user.email}</a>
+                  <a onClick={() => sendDataToParent(user.name, user.email)}  className='cursor-pointer hover:text-blue-500' href="/gestion/user" >{user.email}</a>
                 </td>
                 <td className="p-4 text-sm text-gray-800">
-                  <a className='cursor-pointer hover:text-blue-500' href="/gestion/user">{user.name}</a>
+                  <a onClick={() => sendDataToParent(user.name, user.email)} className='cursor-pointer hover:text-blue-500' href="/gestion/user">{user.name}</a>
                 </td>
                 <td className="p-4 text-sm text-gray-800">{user.createdAt}</td>
                 <td className="p-4 text-sm text-gray-800 flex gap-2">
-                  <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
+                  <a href="/gestion/user">
+                    <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
+                  </a>
                   <FiTrash2 className="text-red-500 cursor-pointer hover:text-red-700" />
                 </td>
               </tr>

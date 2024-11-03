@@ -1,0 +1,24 @@
+<p>
+    Le hook useEffect est une fonction dans React qui permet d'exécuter du code lorsque certains événements se produisent dans le cycle de vie d'un composant. En termes simples, il est souvent utilisé pour exécuter des effets secondaires tels que le fetching des données, la manipulation du DOM, ou l'écoute d'événements.
+    
+    Voici comment il fonctionne :
+    
+    Dépendances : useEffect prend deux arguments : une fonction à exécuter, et un tableau de dépendances. Ce tableau de dépendances est essentiel car il détermine quand l'effet sera déclenché.
+    Exécution initiale : Si le tableau de dépendances est vide ([]), l'effet sera exécuté uniquement après le montage initial du composant.
+    Dépendances spécifiques : Si le tableau contient des variables, l'effet se déclenchera chaque fois que l'une de ces variables change.
+    Effets de nettoyage : Si la fonction de useEffect retourne une autre fonction, cette dernière est utilisée comme fonction de "nettoyage". Cela est utile par exemple pour désinscrire un écouteur d'événements ou annuler un appel réseau.
+    Exemple de code :
+    
+    jsx
+    Copier le code
+    useEffect(() => {
+      // Logique exécutée à chaque changement de "variable"
+      console.log("Effet déclenché");
+    
+      return () => {
+        // Nettoyage, appelé avant la prochaine exécution ou au démontage du composant
+        console.log("Nettoyage effectué");
+      };
+    }, [variable]);
+    Ce hook permet de contrôler le moment où certaines actions doivent être effectuées en fonction de l'évolution de l'état du composant.
+</p>

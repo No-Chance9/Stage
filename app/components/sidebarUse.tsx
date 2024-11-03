@@ -34,7 +34,7 @@ export const SidebarUse = ({children}: { children: ReactNode }) => {
         },
         {
             label: "Gestion des utilisateurs",
-            href: "/gestion/modif",
+            href: "/gestion/",
             icon: (
                 <IconUserBolt className="text-icon hover:text-sky-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),

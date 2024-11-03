@@ -1,15 +1,71 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import { FiEdit2, FiTrash2 } from 'react-icons/fi';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ButtonEdit from '@/app/components/buttonEdit';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function GestionUser() {
+export default function Attribution() {
+
+  //   Le double useEffect a été utilisé pour deux tâches différentes :
+
+  // Le premier useEffect s'assure de récupérer les valeurs de la base de données lorsque le composant est monté (via fetchValues).
+  // Le second useEffect est utilisé pour définir les données récupérées (selectedName) une fois qu'elles sont reçues par le composant Attribution.
+  // Ces deux étapes sont distinctes : l'une concerne la récupération de données, l'autre le réglage des valeurs à afficher, d'où l'usage de deux useEffect.
+
+  const [values, setValues] = useState<{
+      name: string,
+      email: string,
+  }>({
+      name: '',
+      email: '',
+  });
+
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("selectedData");
+
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      
+      const name = parsedData.name;
+      const email = parsedData.email;
+
+      setValues({name, email});
+    }
+  }, []);
+
+  const [modifs, setModif] = useState("");
+
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
+    setModif(event.target.value);
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await fetch("/api/users", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email, // Identifiant de l'utilisateur
+          updatedData:{surname: modifs} // Valeur modifiée
+        }),
+      });
+      console.log("modification:", modifs);
+
+      if (response.ok) {
+        console.log("Nouveau nom sauvegardé :", modifs);
+      } else {
+        console.error("Erreur lors de la mise à jour :", response.statusText);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde :", error);
+    }
+  };
+
   const users = [
     { role: 'Admin', avatar: '/images/theo.svg', email: 'theo@ziema.fr', name: 'Théo', createdAt: '05/12/2023' },
-
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,12 +89,11 @@ export default function GestionUser() {
 
       <div className="overflow-x-auto grid m-6">
         <div className='flex flex-col bg-white justify-between items-center p-4'>
-          {users.map((user, index) => (
+          {users.map((user) => (
             <div>
               <Image src={user.avatar} alt="avatar" width={191} height={191} className="rounded-full " />
               <p>{user.name}[surname]</p>
-            </div>
-          ))}
+            </div>))}
           <div className="max-w-md mx-auto p-6">
             <form className="space-y-4">
               <div>
@@ -51,15 +106,15 @@ export default function GestionUser() {
               </div>
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">Prénom</label>
-                <input type="text" id="firstName" name="firstName" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue="Théo" />
+                <input type="text" id="firstName" name="firstName" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue={values.name}  />
               </div>
               <div>
                 <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Nom</label>
-                <input type="text" id="lastName" name="lastName" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue="Garcia" />
+                <input type="text" id="lastName" name="lastName" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue="Garcia" onChange={handleValueChange} />
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="email" name="email" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue="theo@ziema.fr" />
+                <input type="email" id="email" name="email" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue={values.email} />
               </div>
               <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700">Adresse</label>
@@ -75,7 +130,7 @@ export default function GestionUser() {
                   <input type="text" id="postalCode" name="postalCode" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue="31000" />
                 </div>
               </div>
-              <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick={handleSave}>
                 Enregistrer les modifications
               </button>
             </form>
