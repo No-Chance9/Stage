@@ -3,6 +3,8 @@ import User from "@/models/User";
 import type { NextAuthOptions } from "next-auth";
 import credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { getToken } from 'next-auth/jwt';
+
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -20,6 +22,8 @@ export const authOptions: NextAuthOptions = {
                 }).select("+password");
 
                 if (!user) throw new Error("Wrong Email");
+
+                console.log('Token:', getToken);
 
                 const passwordMatch = await bcrypt.compare(
                     credentials!.password,

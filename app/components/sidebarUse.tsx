@@ -27,14 +27,14 @@ export const SidebarUse = ({children}: { children: ReactNode }) => {
     const links = [
         {
             label: "Tableaux de bord",
-            href: "/",
+            href: "/authentified/dashboard",
             icon: (
                 <IconBrandTabler className="text-icon  dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
         },
         {
             label: "Gestion des utilisateurs",
-            href: "/gestion/",
+            href: "/authentified/gestion/",
             icon: (
                 <IconUserBolt className="text-icon hover:text-sky-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),

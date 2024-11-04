@@ -100,22 +100,22 @@ export default function UserManagementTable({sendDataToParent}:any) {
             {users.map((user, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
                 <td className="p-4 text-sm text-gray-800 " >
-                  <a  href="/gestion/user" className='cursor-pointer hover:text-blue-500'>{user.role}</a>
+                  <a  href="/authentified/gestion/user" className='cursor-pointer hover:text-blue-500'>{user.role}</a>
                 </td>
                 <td className="p-4 text-sm text-gray-800">
-                  <a href="/gestion/user">
+                  <a href="/authentified/gestion/user">
                     <Image src={user.avatar} alt="avatar" width={30} height={30} className="rounded-full border hover:border-blue-500" />
                   </a>
                 </td>
                 <td className="p-4 text-sm text-gray-800">
-                  <a onClick={() => sendDataToParent(user.name, user.email)}  className='cursor-pointer hover:text-blue-500' href="/gestion/user" >{user.email}</a>
+                  <a onClick={() => sendDataToParent(user.name, user.email)}  className='cursor-pointer hover:text-blue-500' href="/authentified/gestion/user" >{user.email}</a>
                 </td>
                 <td className="p-4 text-sm text-gray-800">
-                  <a onClick={() => sendDataToParent(user.name, user.email)} className='cursor-pointer hover:text-blue-500' href="/gestion/user">{user.name}</a>
+                  <a onClick={() => sendDataToParent(user.name, user.email)} className='cursor-pointer hover:text-blue-500' href="/authentified/gestion/user">{user.name}</a>
                 </td>
                 <td className="p-4 text-sm text-gray-800">{user.createdAt}</td>
                 <td className="p-4 text-sm text-gray-800 flex gap-2">
-                  <a href="/gestion/user">
+                  <a href="/authentified/gestion/user">
                     <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
                   </a>
                   <FiTrash2 className="text-red-500 cursor-pointer hover:text-red-700" />
