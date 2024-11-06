@@ -32,7 +32,10 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased inter.className`}
         >
+            {/* <SidebarUse > */}
+                {/* <Header /> */}
               {children}
+            {/* </SidebarUse>         */}
         </body>
       </Provider>
     </html>

@@ -15,8 +15,8 @@ export default function Home() {
 
   const showSession = () => {
     if (status === "authenticated") {
-      console.log('etat use session:', useSession().status);
-      console.log('Token:', getToken);
+      console.log('etat use session:', useSession());
+      router.push("/authentified/dashboard")
       return (
         <>
           <button
@@ -29,7 +29,7 @@ export default function Home() {
           >
             Sign Out
           </button>
-          <Dashboard />
+          {/* <Dashboard /> */}
         </>
       )
     } else if (status === "loading") {
@@ -43,9 +43,9 @@ export default function Home() {
       return (
         <Link
           href="/login"
-          className="border border-solid border-black rounded"
+          className="flex justify-center border border-solid w-1/3 text-white bg-indigo-700 border-black rounded-lg"
         >
-          Sign In
+          <p className="m-2">Sign In</p>
         </Link>
       )
     }
