@@ -4,6 +4,7 @@ import "../globals.css";
 import { SidebarUse } from "../components/sidebarUse";
 import Header from "../components/header";
 import { Provider } from "../provider";
+import SignOutButton from "../components/signOutButton";
 
 
 export const metadata: Metadata = {
@@ -20,6 +21,9 @@ export default function AuthentifiedLayout({
         // <Provider>
         <SidebarUse >
             <Header />
+            <div className="flex justify-center">
+                <SignOutButton />
+            </div>
             {children}
         </SidebarUse>
         // </Provider>

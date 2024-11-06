@@ -13,7 +13,8 @@ export default function Register() {
         const r = await register({
             email: formData.get("email"),
             password: formData.get("password"),
-            name: formData.get("name")
+            name: formData.get("name"),
+            surname: formData.get("surname"),
         });
         ref.current?.reset();
         if (r?.error) {
@@ -24,34 +25,47 @@ export default function Register() {
         }
     };
     return (
-        <div className="flex flex-col h-screen relative">
+        <div className="flex flex-col max-w-7xl mx-auto h-screen relative">
             <section className="w-full h-1/2 bg-blue-800 flex items-center justify-center">
                 <form ref={ref}
                     action={handleSubmit}
-                    className="p-6 absolute bottom-60 w-full max-w-[400px] flex flex-col justify-between items-center gap-2
+                    className="p-6 absolute bottom-60 w-full max-w-[500px] flex flex-col justify-between items-center gap-2
                     border border-solid border-black bg-white rounded-lg">
                     {error && <div className="">{error}</div>}
-                    <h1 className="mb-5 w-full text-2xl font-bold">Register</h1>
-                    <label className="w-full text-sm">Full Name</label>
-                    <input
-                        type="text"
-                        placeholder="Full Name"
-                        className="w-full h-8 border border-solid border-black py-1 px-2.5 rounded text-[13px]"
-                        name="name"
-                    />
+                    <h1 className="flex justify-center mb-5 w-full text-2xl font-bold">Register</h1>
+                    <div className="flex flex-row flex-auto w-full gap-2">
+                        <div className="flex flex-col flex-1">
+                            <label className=" text-sm">Name</label>
+                            <input
+                                type="text"
+                                // placeholder="Name"
+                                className=" bg-slate-200 h-8 border border-solid border-black flex-1 py-1 px-2.5 rounded text-[13px]"
+                                name="name"
+                            />
+                        </div>
+                        <div className="flex flex-col flex-1">
+                            <label className=" text-sm"> Surname</label>
+                            <input
+                                type="text"
+                                // placeholder="Surname"
+                                className=" bg-slate-200 h-8 border border-solid border-black flex-1 py-1 px-2.5 rounded text-[13px]"
+                                name="surname"
+                            />
+                        </div>
+                    </div>
                     <label className="w-full text-sm">Email</label>
                     <input
                         type="email"
-                        placeholder="Email"
-                        className="w-full h-8 border border-solid border-black py-1 px-2.5 rounded"
+                        // placeholder="Email"
+                        className="w-full bg-slate-200 h-8 border border-solid border-black py-1 px-2.5 rounded"
                         name="email"
                     />
                     <label className="w-full text-sm">Password</label>
                     <div className="flex w-full">
                         <input
                             type="password"
-                            placeholder="Password"
-                            className="w-full h-8 border border-solid border-black py-1 px-2.5 rounded"
+                            // placeholder="Password"
+                            className="w-full bg-slate-200 h-8 border border-solid border-black py-1 px-2.5 rounded"
                             name="password"
                         />
                     </div>

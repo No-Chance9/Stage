@@ -15,27 +15,33 @@ export async function GET() {
     }
 }
 
-// export async function PUT(request: Request) {
+
+
+// export async function test(request: Request) {
 //     await connectDB();
 //     console.log("Database connected successfully");
 
 //     try {
 //         const { email, updatedData } = await request.json();
-//         console.log("Assurez-vous que les :", email,updatedData);
+//         console.log("Received data:", email, updatedData);
 
 //         if (!email || !updatedData) {
+//             console.error("Missing email or updatedData");
 //             return NextResponse.json({ error: "Missing email or updatedData" });
 //         }
 
 //         const updatedUser = await User.findOneAndUpdate(
-//             {email}, 
-//             {...updatedData}, 
-//             { new: true });
+//             { email },
+//             { $set: updatedData },
+//             { new: true }
+//         );
 
 //         if (!updatedUser) {
+//             console.error("User not found for email:", email);
 //             return NextResponse.json({ error: "User not found" });
 //         }
 
+//         console.log("User updated successfully:", updatedUser);
 //         return NextResponse.json(updatedUser);
 //     } catch (err: any) {
 //         console.error("Error during update:", err);
@@ -43,37 +49,51 @@ export async function GET() {
 //     }
 // }
 
-export async function PUT(request: Request) {
+// export async function PUT(values: any) {
+//     const { email, password, name, surname } = values;
+
+//     try {
+//         await connectDB();
+//         const updatedUser = await User.findOneAndUpdate(
+//             {
+//                 email,
+//                 surname: surname,
+//                 new: true
+//             }
+//         );
+//         console.log("User updated successfully:", updatedUser);
+
+//     } catch (e) {
+//         console.log(e);
+//     }
+
+// }
+
+export async function PUT(request: NextRequest) {
+    console.log("PUT request received");
     await connectDB();
-    console.log("Database connected successfully");
 
     try {
-        const { email, updatedData } = await request.json();
-        console.log("Received data:", email, updatedData);
-
-        if (!email || !updatedData) {
-            console.error("Missing email or updatedData");
-            return NextResponse.json({ error: "Missing email or updatedData" });
-        }
+        console.log("Attempting to parse JSON from request body");
+        const { email, surname } = await request.json();
+        console.log("Parsed JSON:", { email, surname });
 
         const updatedUser = await User.findOneAndUpdate(
             { email },
-            { $set: updatedData },
+            { $set: { surname } },
             { new: true }
         );
 
         if (!updatedUser) {
             console.error("User not found for email:", email);
-            return NextResponse.json({ error: "User not found" });
+            return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
         console.log("User updated successfully:", updatedUser);
         return NextResponse.json(updatedUser);
     } catch (err: any) {
-        console.error("Error during update:", err);
-        return NextResponse.json({ error: err.message });
+        console.error("Error during update:", err.message);
+        return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
-
-
 

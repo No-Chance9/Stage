@@ -17,9 +17,6 @@ export default async function middleware(request: NextRequest) {
     }
 
     // Sinon, laisse accéder à la page
-    console.log('Test');
-
-    // return NextResponse.redirect(new URL('/authentified/dashboard', request.url));
     return NextResponse.next();
 
 }

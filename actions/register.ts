@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
 export const register = async (values: any) => {
-    const { email, password, name } = values;
+    const { email, password, name, surname } = values;
 
     try {
         await connectDB();
@@ -21,6 +21,7 @@ export const register = async (values: any) => {
             name,
             email,
             password: hashedPassword,
+            surname,
         });
         const savedUser = await user.save();
 

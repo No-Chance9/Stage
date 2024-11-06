@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import ButtonEdit from '@/app/components/buttonEdit';
 import { useState, useEffect } from 'react';
+import {PUT} from '@/app/api/users/route'
 
 export default function Attribution() {
 
@@ -40,29 +41,43 @@ export default function Attribution() {
     setModif(event.target.value);
   };
 
-  const handleSave = async () => {
-    try {
-      const response = await fetch("/api/users", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: values.email, // Identifiant de l'utilisateur
-          updatedData:{surname: modifs} // Valeur modifiée
-        }),
-      });
-      console.log("modification:", modifs);
 
-      if (response.ok) {
-        console.log("Nouveau nom sauvegardé :", modifs);
-      } else {
-        console.error("Erreur lors de la mise à jour :", response.statusText);
-      }
+  const handleSave = async (event: React.FormEvent) => {
+    console.log("Début de handleSave"); // Vérifie si handleSave est bien appelé
+    event.preventDefault();
+    try {
+        const response = await fetch("/api/users", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: values.email,
+                surname: modifs,
+            }),
+        });
+
+        console.log("Requête envoyée à l'API"); // Vérifie que fetch ne bloque pas
+
+        if (!response.ok) {
+            console.error("Erreur lors de la mise à jour :", response.statusText);
+            return;
+        }
+
+        try {
+            const updatedUser = await response.json();
+            console.log("Nouveau nom sauvegardé :", updatedUser.surname);
+        } catch (jsonError) {
+            console.error("Erreur lors du parsing JSON :", jsonError);
+        }
     } catch (error) {
-      console.error("Erreur lors de la sauvegarde :", error);
+        console.error("Erreur lors de la sauvegarde :", error);
     }
-  };
+};
+
+
+
+
 
   const users = [
     { role: 'Admin', avatar: '/images/theo.svg', email: 'theo@ziema.fr', name: 'Théo', createdAt: '05/12/2023' },
@@ -95,7 +110,7 @@ export default function Attribution() {
               <p>{user.name}[surname]</p>
             </div>))}
           <div className="max-w-md mx-auto p-6">
-            <form className="space-y-4">
+            <form onSubmit={handleSave} className="space-y-4">
               <div>
                 <label htmlFor="role" className="block text-sm font-medium text-gray-700">Rôle</label>
                 <select id="role" name="role" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -212,5 +227,5 @@ export default function Attribution() {
 
   );
 }
-
+    
 

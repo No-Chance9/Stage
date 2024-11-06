@@ -25,7 +25,7 @@ export default function Login() {
     };
 
     return (
-        <div className="flex flex-col h-screen relative">
+        <div className="flex flex-col max-w-7xl mx-auto h-screen relative">
             <section className="w-full h-1/2 bg-blue-800 flex items-center justify-center">
                 <form
                     className="p-6 absolute bottom-60 w-full max-w-[400px] flex flex-col justify-between items-center gap-2
