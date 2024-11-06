@@ -3,7 +3,6 @@ import React from 'react';
 import Image from 'next/image';
 import ButtonEdit from '@/app/components/buttonEdit';
 import { useState, useEffect } from 'react';
-import {PUT} from '@/app/api/users/route'
 
 export default function Attribution() {
 
@@ -14,11 +13,14 @@ export default function Attribution() {
   // Ces deux étapes sont distinctes : l'une concerne la récupération de données, l'autre le réglage des valeurs à afficher, d'où l'usage de deux useEffect.
 
   const [values, setValues] = useState<{
-      name: string,
-      email: string,
+    name: string,
+    email: string,
+    // surname: string,
+
   }>({
-      name: '',
-      email: '',
+    name: '',
+    email: '',
+    // surname: '',
   });
 
 
@@ -27,17 +29,18 @@ export default function Attribution() {
 
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-      
+
       const name = parsedData.name;
       const email = parsedData.email;
+      // const surname = '';
 
-      setValues({name, email});
+      setValues({ name, email });
     }
   }, []);
 
   const [modifs, setModif] = useState("");
 
-  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setModif(event.target.value);
   };
 
@@ -46,42 +49,67 @@ export default function Attribution() {
     console.log("Début de handleSave"); // Vérifie si handleSave est bien appelé
     event.preventDefault();
     try {
-        const response = await fetch("/api/users", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: values.email,
-                surname: modifs,
-            }),
-        });
+      const response = await fetch("/api/users", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          surname: modifs,
+        }),
+      });
 
-        console.log("Requête envoyée à l'API"); // Vérifie que fetch ne bloque pas
+      console.log("Requête envoyée à l'API"); // Vérifie que fetch ne bloque pas
 
-        if (!response.ok) {
-            console.error("Erreur lors de la mise à jour :", response.statusText);
-            return;
-        }
+      if (!response.ok) {
+        console.error("Erreur lors de la mise à jour :", response.statusText);
+        return;
+      }
 
-        try {
-            const updatedUser = await response.json();
-            console.log("Nouveau nom sauvegardé :", updatedUser.surname);
-        } catch (jsonError) {
-            console.error("Erreur lors du parsing JSON :", jsonError);
-        }
+      try {
+        const updatedUser = await response.json();
+        console.log("Nouveau nom sauvegardé :", updatedUser.surname);
+      } catch (jsonError) {
+        console.error("Erreur lors du parsing JSON :", jsonError);
+      }
     } catch (error) {
-        console.error("Erreur lors de la sauvegarde :", error);
+      console.error("Erreur lors de la sauvegarde :", error);
     }
-};
+  };
 
+  const [data, setData] = useState<{
+    surname:string[],
 
+  }>({
+    surname: [],
+  });
 
+  const users = async () => {
+    try {
+      const res = await fetch("/api/users");
+      const data = await res.json();
 
+      const role = data.map((item: any) => item.role);
+      const avatar = data.map((item: any) => item.avatar);
+      const surname = data.map((item: any) => item.surname);
+      const email = data.map((item: any) => item.email);
+      // const createdAt = data.map((item: any) => item.createdAt);
+      if(data.findOne({email:values.email}).exec()){
+      setData({surname})
+      }
+      console.log('from surname:', surname)
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  }
 
-  const users = [
-    { role: 'Admin', avatar: '/images/theo.svg', email: 'theo@ziema.fr', name: 'Théo', createdAt: '05/12/2023' },
-  ];
+  useEffect(() => {
+    users();
+  }, []);
+  // [
+  //   { role: 'Admin', avatar: '/images/theo.svg', email: 'theo@ziema.fr', name: 'Théo', createdAt: '05/12/2023' },
+  // ]
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
@@ -91,7 +119,7 @@ export default function Attribution() {
     setCurrentPage(page);
   };
 
-  const paginatedUsers = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // const paginatedUsers = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <>
@@ -104,11 +132,11 @@ export default function Attribution() {
 
       <div className="overflow-x-auto grid m-6">
         <div className='flex flex-col bg-white justify-between items-center p-4'>
-          {users.map((user) => (
+          {/* {users.map((user) => (
             <div>
               <Image src={user.avatar} alt="avatar" width={191} height={191} className="rounded-full " />
               <p>{user.name}[surname]</p>
-            </div>))}
+            </div>))} */}
           <div className="max-w-md mx-auto p-6">
             <form onSubmit={handleSave} className="space-y-4">
               <div>
@@ -121,11 +149,11 @@ export default function Attribution() {
               </div>
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">Prénom</label>
-                <input type="text" id="firstName" name="firstName" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue={values.name}  />
+                <input type="text" id="firstName" name="firstName" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue={values.name} />
               </div>
               <div>
                 <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Nom</label>
-                <input type="text" id="lastName" name="lastName" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue="Garcia" onChange={handleValueChange} />
+                <input type="text" id="lastName" name="lastName" className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue={data.surname} onChange={handleValueChange} />
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
@@ -227,5 +255,5 @@ export default function Attribution() {
 
   );
 }
-    
+
 
