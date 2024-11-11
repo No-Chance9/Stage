@@ -10,13 +10,13 @@ import { useState, useEffect } from 'react';
 export default function UserManagementTable({sendDataToParent}:any) {
 
   const [chartData, setChartData] = useState<{
-    // role: string[],
+    role: string[],
     name: string[],
     // avatar: string[],
     email: string[],
     // createdAt: Date,
   }>({
-    // role: [],
+    role: [],
     name: [],
     // avatar: [],
     email: [],
@@ -34,7 +34,7 @@ export default function UserManagementTable({sendDataToParent}:any) {
       const email = data.map((item: any) => item.email);
       // const createdAt = data.map((item: any) => item.createdAt);
 
-      setChartData({ name, email });
+      setChartData({ name, email, role });
       console.log('from register:', data)
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -47,7 +47,7 @@ export default function UserManagementTable({sendDataToParent}:any) {
 
 
   const users = chartData.name.map((name, index) => ({
-    role: 'Utilisateur', // Vous pouvez ajouter d'autres données ici si nécessaire
+    role: chartData.role[index], // Vous pouvez ajouter d'autres données ici si nécessaire
     avatar: '/images/theo.svg', // Mettre un avatar par défaut ou utiliser une valeur dynamique
     email: chartData.email[index],
     name: name,

@@ -10,8 +10,8 @@ export interface UserDocument {
     phone: number;
     avatar: string;
     adresse: string;
-    city: string;
-    codePostal: number;
+    ville: string;
+    code: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -49,10 +49,10 @@ const UserSchema = new Schema<UserDocument>({
     adresse: {
         type: String,
     },
-    city: {
+    ville: {
         type: String,
     },
-    codePostal: {
+    code: {
         type: Number,
     },
 },

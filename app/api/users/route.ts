@@ -15,19 +15,18 @@ export async function GET() {
     }
 }
 
-
 export async function PUT(request: NextRequest) {
     console.log("PUT request received");
     await connectDB();
 
     try {
         console.log("Attempting to parse JSON from request body");
-        const { email, surname } = await request.json();
+        const { email, name, surname, adresse, ville, code, role } = await request.json();
         console.log("Parsed JSON:", { email, surname });
 
         const updatedUser = await User.findOneAndUpdate(
             { email },
-            { $set: { surname } },
+            { $set: { name, surname, adresse, ville, code, role} },
             { new: true }
         );
 
