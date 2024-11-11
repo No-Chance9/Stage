@@ -90,7 +90,7 @@ export const Dashboard = () => {
     return (
         <div className="flex flex-wrap   ">
             <div className="grid grid-cols-10 ">
-                <h1 className="font-bold p-4 ">Totaux</h1>
+                <h1 className="font-bold p-4 ">Overview</h1>
                 <div className=" col-start-7 p-4 col-end-9">
                     <ButtonGroup />
                 </div>
@@ -99,7 +99,7 @@ export const Dashboard = () => {
                 </div>
                 {/* </ */}
             </div>
-            <div className="rounded-tl-2xl dark:border-neutral-700 bg-gray dark:bg-neutral-900 flex flex-col gap-2  h-max">
+            <div className="rounded-tl-2xl dark:border-neutral-700 bg-gray dark:bg-neutral-900 flex flex-col gap-2 w-max h-max">
                 <div className="flex gap-2 w-max flex-1 p-4">
                     {/* {[...new Array(4)].map((i) => ( */}
                     <div
