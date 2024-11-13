@@ -12,8 +12,10 @@ export interface UserDocument {
     adresse: string;
     ville: string;
     code: number;
+    profilePicture?: mongoose.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
+    isActive: boolean;
 }
 
 const UserSchema = new Schema<UserDocument>({
@@ -55,6 +57,12 @@ const UserSchema = new Schema<UserDocument>({
     code: {
         type: Number,
     },
+    profilePicture: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'ProfilePicture'
+    }, // Référence à une image
+    isActive: {
+        type: Boolean, default: true
+    }, // Soft delete flag
 },
     {
         timestamps: true,

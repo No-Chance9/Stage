@@ -6,9 +6,10 @@ import { NextResponse, NextRequest } from "next/server";
 export async function GET() {
     await connectDB();
     try {
-        const values = await User.find({});
+        // const activeUsers = await User.find({isActive: true});
+        const activeUsers = await User.find({isActive: true});
 
-        return NextResponse.json(values);
+        return NextResponse.json(activeUsers);
 
     } catch (err: any) {
         return NextResponse.json({ error: err.message });
@@ -26,7 +27,7 @@ export async function PUT(request: NextRequest) {
 
         const updatedUser = await User.findOneAndUpdate(
             { email },
-            { $set: { name, surname, adresse, ville, code, role} },
+            { $set: { name, surname, adresse, ville, code, role } },
             { new: true }
         );
 
@@ -40,6 +41,28 @@ export async function PUT(request: NextRequest) {
     } catch (err: any) {
         console.error("Error during update:", err.message);
         return NextResponse.json({ error: err.message }, { status: 500 });
+    }
+}
+
+// Route handler to "delete" a user (soft delete)
+export async function DELETE(request: NextRequest) {
+    await connectDB();
+    const { email, isActive } = await request.json();
+
+    try {
+        const updatedUser = await User.findOneAndUpdate(
+            { email },
+            { $set: { isActive }}, 
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return NextResponse.json({ error: "User not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: "User soft deleted successfully", user: updatedUser });
+    } catch (error) {
+        return NextResponse.json({ error: `Failed to soft delete user:` }, { status: 500 });
     }
 }
 

@@ -6,56 +6,86 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ButtonEdit from '@/app/components/buttonEdit';
 import { useState, useEffect } from 'react';
 
-
-export default function UserManagementTable({sendDataToParent}:any) {
-
-  const [chartData, setChartData] = useState<{
-    role: string[],
-    name: string[],
-    // avatar: string[],
-    email: string[],
-    // createdAt: Date,
-  }>({
-    role: [],
-    name: [],
-    // avatar: [],
-    email: [],
-    // createdAt: Date,
-  });
+export default function UserManagementTable({ sendDataToParent }: any) {
+  const [users, setUsers] = useState<
+    Array<{
+      role: string;
+      name: string;
+      profilePictureUrl: string;
+      email: string;
+      createdAt: string;
+    }>
+  >([]);
 
   const fetchValues = async () => {
     try {
       const res = await fetch("/api/users");
       const data = await res.json();
 
-      const role = data.map((item: any) => item.role);
-      const avatar = data.map((item: any) => item.avatar);
-      const name = data.map((item: any) => item.name);
-      const email = data.map((item: any) => item.email);
-      // const createdAt = data.map((item: any) => item.createdAt);
+      // Fetch each profile picture based on profilePictureId
+      const usersWithImages = await Promise.all(
+        data.map(async (user: any) => {
+          let profilePictureUrl = "/images/default-avatar.svg"; // Fallback URL if no profile picture
 
-      setChartData({ name, email, role });
-      console.log('from register:', data)
+          if (user.profilePicture) {
+            try {
+              const imageRes = await fetch(`/api/profilePicture/${user.profilePicture}`);
+              const imageData = await imageRes.json();
+              if (imageData && imageData.path) {
+                profilePictureUrl = imageData.path;
+              }
+            } catch (error) {
+              console.error("Error fetching profile picture:", error);
+            }
+          }
+
+          return {
+            role: user.role,
+            name: user.name,
+            profilePictureUrl,
+            email: user.email,
+            createdAt: user.createdAt || "05/12/2023", // Use a default if createdAt is missing
+          };
+        })
+      );
+
+      setUsers(usersWithImages);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchValues();
   }, []);
 
+  // Soft delete function
+  const handleDelete = async (email: string) => {
+    try {
+      const res = await fetch("/api/users", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, isActive: false }), // Pass email and set isActive to false
+      });
 
-  const users = chartData.name.map((name, index) => ({
-    role: chartData.role[index], // Vous pouvez ajouter d'autres données ici si nécessaire
-    avatar: '/images/theo.svg', // Mettre un avatar par défaut ou utiliser une valeur dynamique
-    email: chartData.email[index],
-    name: name,
-    createdAt: '05/12/2023', // Vous pouvez adapter cette valeur
-  }));
+      if (res.ok) {
+        const updatedUser = await res.json();
+        console.log("User soft deleted:", updatedUser);
+
+        // Update the local state to remove the user or set isActive to false
+        setUsers((prevUsers) => prevUsers.filter((user) => user.email !== email));
+      } else {
+        console.error("Failed to delete user:", res.statusText);
+      }
+    } catch (error) {
+      console.error("Error during delete:", error);
+    }
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(users.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
@@ -97,34 +127,52 @@ export default function UserManagementTable({sendDataToParent}:any) {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {paginatedUsers.map((user, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="p-4 text-sm text-gray-800 " >
-                  <a  href="/authentified/gestion/user" className='cursor-pointer hover:text-blue-500'>{user.role}</a>
+                <td className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 "
+                  onClick={() => {
+                    sendDataToParent(user.name, user.email);
+                    window.location.href = "/authentified/gestion/user";
+                  }} >
+                  {user.role}
                 </td>
-                <td className="p-4 text-sm text-gray-800">
-                  <a href="/authentified/gestion/user">
-                    <Image src={user.avatar} alt="avatar" width={30} height={30} className="rounded-full border hover:border-blue-500" />
-                  </a>
+                <td onClick={() => {
+                  sendDataToParent(user.name, user.email);
+                  window.location.href = "/authentified/gestion/user";
+                }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
+                  <Image src={user.profilePictureUrl} alt="avatar" width={30} height={30} className="rounded-full border hover:border-blue-500" />
                 </td>
-                <td className="p-4 text-sm text-gray-800">
-                  <a onClick={() => sendDataToParent(user.name, user.email)}  className='cursor-pointer hover:text-blue-500' href="/authentified/gestion/user" >{user.email}</a>
+                <td onClick={() => {
+                  sendDataToParent(user.name, user.email);
+                  window.location.href = "/authentified/gestion/user";
+                }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
+                  {user.email}
                 </td>
-                <td className="p-4 text-sm text-gray-800">
-                  <a onClick={() => sendDataToParent(user.name, user.email)} className='cursor-pointer hover:text-blue-500' href="/authentified/gestion/user">{user.name}</a>
+                <td onClick={() => {
+                  sendDataToParent(user.name, user.email);
+                  window.location.href = "/authentified/gestion/user";
+                }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
+                  {user.name}
                 </td>
                 <td className="p-4 text-sm text-gray-800">{user.createdAt}</td>
-                <td className="p-4 text-sm text-gray-800 flex gap-2">
-                  <a href="/authentified/gestion/user">
+                <td
+                  className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 flex gap-2">
+                  <a href="/authentified/gestion/user" onClick={() => {
+                    sendDataToParent(user.name, user.email);
+                  }}>
                     <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
                   </a>
-                  <FiTrash2 className="text-red-500 cursor-pointer hover:text-red-700" />
+                  <button onClick={() => {
+                    handleDelete(user.email);
+                  }}>
+                    <FiTrash2 className="text-red-500 cursor-pointer hover:text-red-700" />
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="flex  justify-self-end justify-end items-center mt-4 bg-white">
+        <div className="flex justify-self-end justify-end items-center mt-4 bg-white">
           <button
             onClick={() => handlePageChange(1)}
             disabled={currentPage === 1}
@@ -167,5 +215,3 @@ export default function UserManagementTable({sendDataToParent}:any) {
     </>
   );
 }
-
-

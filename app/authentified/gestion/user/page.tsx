@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import ButtonEdit from '@/app/components/buttonEdit';
 import { useState, useEffect } from 'react';
+import UploadForm from '@/app/components/uploadForm';
 
 export default function Attribution() {
 
@@ -20,6 +21,8 @@ export default function Attribution() {
     ville: string,
     code: string,
     role: string,
+    profilePictureId: string, // ID de l'image de profil
+    profilePictureUrl: string, // URL de l'image de profil
   }>({
     name: '',
     email: '',
@@ -28,6 +31,8 @@ export default function Attribution() {
     ville: '',
     code: '',
     role: '',
+    profilePictureId: '', // ID de l'image de profil
+    profilePictureUrl: '', // URL de l'image de profil
   });
 
   useEffect(() => {
@@ -130,6 +135,7 @@ export default function Attribution() {
       // Trouve l'utilisateur correspondant à l'email dans `values`
       const user = data.find((item: any) => item.email === values.email);
 
+
       // Si un utilisateur correspondant est trouvé, met à jour `values` avec `surname`
       if (user) {
         setValues((prevValues) => ({
@@ -139,10 +145,26 @@ export default function Attribution() {
           ville: user.ville,
           code: user.code,
           role: user.role,
+          profilePictureId: user.profilePicture,
         }));
+        // Si l'utilisateur a un profilePicture ID, récupère les détails de l'image
+        if (user.profilePicture) {
+          const imageRes = await fetch(`/api/profilePicture/${user.profilePicture}`); // Utilisation de l'ID dans l'URL
+          const imageData = await imageRes.json();
+          
+          // Trouve l'utilisateur correspondant à la photo de profil dans `values`
+          // const imageData = imageCollection.find((item: any) => item._id === user.profilePicture);
+          
+          if (imageData && imageData.path) {
+            setValues((prevValues) => ({
+              ...prevValues,
+              profilePictureUrl: imageData.path, // Stocke l'URL de l'image
+            }));
+          }
+        }
       }
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching users or image data:", error);
     }
   }
 
@@ -175,11 +197,14 @@ export default function Attribution() {
 
       <div className="overflow-x-auto grid m-6">
         <div className='flex flex-col bg-white justify-between items-center p-4'>
-          {/* {users.map((user) => (
-            <div>
-              <Image src={user.avatar} alt="avatar" width={191} height={191} className="rounded-full " />
-              <p>{user.name}[surname]</p>
-            </div>))} */}
+          {/* {users.map((user) => ( */}
+          <div>
+            {values.profilePictureUrl ?
+              (<Image src={values.profilePictureUrl} alt="avatar" width={191} height={191} className="rounded-full " />)
+              :
+              (<p>Pas de photo de profil</p>)}
+            <UploadForm />
+          </div>
           <div className="max-w-md mx-auto p-6">
             <form onSubmit={handleSave} className="space-y-4">
               <div>
