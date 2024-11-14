@@ -5,8 +5,15 @@ import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ButtonEdit from '@/app/components/buttonEdit';
 import { useState, useEffect } from 'react';
+import { useSession } from "next-auth/react";
+
 
 export default function UserManagementTable({ sendDataToParent }: any) {
+  const { data: session } = useSession();
+
+  // Access the user ID from session
+  const userId = session?.user?.id;
+
   const [users, setUsers] = useState<
     Array<{
       role: string;
@@ -25,7 +32,7 @@ export default function UserManagementTable({ sendDataToParent }: any) {
       // Fetch each profile picture based on profilePictureId
       const usersWithImages = await Promise.all(
         data.map(async (user: any) => {
-          let profilePictureUrl = "/images/default-avatar.svg"; // Fallback URL if no profile picture
+          let profilePictureUrl = "/images/Union.svg"; // Fallback URL if no profile picture
 
           if (user.profilePicture) {
             try {

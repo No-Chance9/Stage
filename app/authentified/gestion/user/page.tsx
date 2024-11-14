@@ -4,8 +4,12 @@ import Image from 'next/image';
 import ButtonEdit from '@/app/components/buttonEdit';
 import { useState, useEffect } from 'react';
 import UploadForm from '@/app/components/uploadForm';
+import { useSession } from "next-auth/react";
 
 export default function Attribution() {
+
+
+
 
   //   Le double useEffect a été utilisé pour deux tâches différentes :
 

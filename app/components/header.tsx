@@ -1,6 +1,10 @@
+'use client'
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, Cog6ToothIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useState, useEffect } from 'react';
+import { useSession } from "next-auth/react";
+import Image from 'next/image';
 
 
 const navigation = [
@@ -16,6 +20,29 @@ function classNames(...classes: string[]) {
 
 
 export default function Header() {
+    const [photoProfil, setPhotoProfil] = useState<string>('/images/Union.svg');
+
+    const { data: session } = useSession();
+
+    const user = session?.user;
+
+    console.log("full data", user);
+
+    useEffect(() => {
+        const fetchValues = async () => {
+            if (user) {
+                const imageRes = await fetch(`/api/profilePicture/${user.profilePicture}`);
+                const imageData = await imageRes.json();
+                console.log("imageData.path:", imageData.path);
+
+                setPhotoProfil(imageData.path);
+            }
+        };
+
+        fetchValues();
+    }, [user]);
+
+
     return (
         <Disclosure as="nav" className="bg-white border border-transparent border-l-slate-50  ">
             <div className="mx-auto  px-2 sm:px-6 lg:px-8">
@@ -53,9 +80,10 @@ export default function Header() {
                             <div>
                                 <MenuButton className="relative flex rounded-full bg-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2">
                                     <span className="sr-only">Open user menu</span>
-                                    <img
+                                    <Image
                                         alt=""
-                                        src=""
+                                        src={photoProfil}
+                                        width={30} height={30}
                                         className="h-8 w-8 rounded-full"
                                     />
                                 </MenuButton>
