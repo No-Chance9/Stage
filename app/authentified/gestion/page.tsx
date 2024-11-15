@@ -10,14 +10,16 @@ export default function GestionUser() {
     const [selectedData, setSelectedData] = useState<{
         name: string,
         email: string,
+        index: number,
     }>({
         name: '',
         email: '',
+        index: 1,
     });
 
-    const handleEmailSelection = (name: string, email: string) => {
-        setSelectedData({name, email});
-        localStorage.setItem("selectedData", JSON.stringify({ name, email }));
+    const handleEmailSelection = (name: string, email: string, index:number) => {
+        setSelectedData({name, email, index});
+        localStorage.setItem("selectedData", JSON.stringify({ name, email, index }));
         setShowUserManagement(false);  // Switch to Attribution view when a name is selected
     };
 

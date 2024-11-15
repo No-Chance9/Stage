@@ -27,6 +27,7 @@ export default function Header() {
     const user = session?.user;
 
     console.log("full data", user);
+    console.log("photo profil default", photoProfil);
 
     useEffect(() => {
         const fetchValues = async () => {
@@ -35,7 +36,9 @@ export default function Header() {
                 const imageData = await imageRes.json();
                 console.log("imageData.path:", imageData.path);
 
-                setPhotoProfil(imageData.path);
+                if (imageData && imageData.path) {
+                    setPhotoProfil(imageData.path);
+                }
             }
         };
 

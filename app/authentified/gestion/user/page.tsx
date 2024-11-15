@@ -7,10 +7,6 @@ import UploadForm from '@/app/components/uploadForm';
 import { useSession } from "next-auth/react";
 
 export default function Attribution() {
-
-
-
-
   //   Le double useEffect a été utilisé pour deux tâches différentes :
 
   // Le premier useEffect s'assure de récupérer les valeurs de la base de données lorsque le composant est monté (via fetchValues).
@@ -47,6 +43,9 @@ export default function Attribution() {
 
       const name = parsedData.name;
       const email = parsedData.email;
+      const index = parsedData.index;
+
+      setCurrentPage(index + 1);
 
       setValues((prevValues) => ({ ...prevValues, name, email }));
     }
@@ -130,15 +129,11 @@ export default function Attribution() {
       const res = await fetch("/api/users");
       const data = await res.json();
 
-      // const role = data.map((item: any) => item.role);
-      // const avatar = data.map((item: any) => item.avatar);
-      // const surname = data.map((item: any) => item.surname);
-      // const email = data.map((item: any) => item.email);
-      // const createdAt = data.map((item: any) => item.createdAt);
+      //  Tous les users pour la pagination
+      setUsersPagi(data);
 
       // Trouve l'utilisateur correspondant à l'email dans `values`
       const user = data.find((item: any) => item.email === values.email);
-
 
       // Si un utilisateur correspondant est trouvé, met à jour `values` avec `surname`
       if (user) {
@@ -155,10 +150,10 @@ export default function Attribution() {
         if (user.profilePicture) {
           const imageRes = await fetch(`/api/profilePicture/${user.profilePicture}`); // Utilisation de l'ID dans l'URL
           const imageData = await imageRes.json();
-          
+
           // Trouve l'utilisateur correspondant à la photo de profil dans `values`
           // const imageData = imageCollection.find((item: any) => item._id === user.profilePicture);
-          
+
           if (imageData && imageData.path) {
             setValues((prevValues) => ({
               ...prevValues,
@@ -179,16 +174,17 @@ export default function Attribution() {
     }
   }, [values.email]);
 
+  const [usersPagi, setUsersPagi] = useState<Array<{}>>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
-  const totalPages = Math.ceil(fetchUserData.length / itemsPerPage);
+  const itemsPerPage = 1;
+  const totalPages = Math.ceil(usersPagi.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  // const paginatedUsers = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedUsers = usersPagi.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <>
@@ -207,8 +203,8 @@ export default function Attribution() {
               (<Image src={values.profilePictureUrl} alt="avatar" width={191} height={191} className="rounded-full " />)
               :
               (<p>Pas de photo de profil</p>)}
-            <UploadForm />
           </div>
+          <UploadForm />
           <div className="max-w-md mx-auto p-6">
             <form onSubmit={handleSave} className="space-y-4">
               <div>
@@ -257,38 +253,6 @@ export default function Attribution() {
             </form>
           </div>
         </div>
-        {/* <p className='self-center font-bold'>Gestion des utilisateurs</p>
-        <div className=''>
-          <ButtonEdit />
-        </div>
-      </div>
-      <div className="overflow-x-auto  m-6">
-        <div className='flex bg-white justify-between p-4'>
-          <div className='relative'>
-          </div>
-        </div>
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr className="w-full bg-white border-b">
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Rôle</th>
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Avatar</th>
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Email</th>
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="p-4 text-sm text-gray-800">{user.role}</td>
-                <td className="p-4 text-sm text-gray-800">
-                  <Image src={user.avatar} alt="avatar" width={30} height={30} className="rounded-full" />
-                </td>
-                <td className="p-4 text-sm text-gray-800">{user.email}</td>
-                <td className="p-4 text-sm text-gray-800">{user.name}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
         <div className="flex justify-end items-center mt-4">
           <button
             onClick={() => handlePageChange(1)}

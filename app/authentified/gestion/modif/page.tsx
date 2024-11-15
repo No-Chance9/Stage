@@ -111,7 +111,7 @@ export default function UserManagementTable({ sendDataToParent }: any) {
       </div>
       <div className="overflow-x-auto grid m-6">
         <div className='flex bg-white justify-between p-4'>
-          <h1 className='self-center font-bold'>Modifiez vos users</h1>
+          <h1 className='self-center font-bold'>Vos users</h1>
           <div className='relative'>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
               <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -138,25 +138,25 @@ export default function UserManagementTable({ sendDataToParent }: any) {
               <tr key={index} className="border-b hover:bg-gray-50">
                 <td className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 "
                   onClick={() => {
-                    sendDataToParent(user.name, user.email);
+                    sendDataToParent(user.name, user.email, index);
                     window.location.href = "/authentified/gestion/user";
                   }} >
                   {user.role}
                 </td>
                 <td onClick={() => {
-                  sendDataToParent(user.name, user.email);
+                  sendDataToParent(user.name, user.email, index);
                   window.location.href = "/authentified/gestion/user";
                 }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
                   <Image src={user.profilePictureUrl} alt="avatar" width={30} height={30} className="rounded-full border hover:border-blue-500" />
                 </td>
                 <td onClick={() => {
-                  sendDataToParent(user.name, user.email);
+                  sendDataToParent(user.name, user.email, index);
                   window.location.href = "/authentified/gestion/user";
                 }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
                   {user.email}
                 </td>
                 <td onClick={() => {
-                  sendDataToParent(user.name, user.email);
+                  sendDataToParent(user.name, user.email, index);
                   window.location.href = "/authentified/gestion/user";
                 }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
                   {user.name}
@@ -165,7 +165,7 @@ export default function UserManagementTable({ sendDataToParent }: any) {
                 <td
                   className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 flex gap-2">
                   <a href="/authentified/gestion/user" onClick={() => {
-                    sendDataToParent(user.name, user.email);
+                    sendDataToParent(user.name, user.email, index);
                   }}>
                     <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
                   </a>

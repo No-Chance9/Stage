@@ -88,10 +88,26 @@ const UploadForm: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleFileUpload}>
-            <input type="file" onChange={handleFileChange} />
-            <button type="submit">Upload File</button>
-            {uploadStatus && <p>{uploadStatus}</p>}
+        <form onSubmit={handleFileUpload} className="flex flex-col items-center bg-white p-6 rounded-lg shadow-md space-y-4 w-full max-w-sm mx-auto">
+            <label className="w-full">
+                {/* <span className="block text-sm font-medium text-gray-700 mb-1">Select Profile Picture</span> */}
+                <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+            </label>
+            <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+                Upload File
+            </button>
+            {uploadStatus && (
+                <p className={`text-sm mt-2 ${uploadStatus.includes('Error') ? 'text-red-500' : 'text-green-500'}`}>
+                    {uploadStatus}
+                </p>
+            )}
         </form>
     );
 };
