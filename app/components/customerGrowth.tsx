@@ -84,7 +84,7 @@ export const CustomerGrowthChart = ( {sendDataToParent}:any ) => {
     };
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-5">
+        <div className="bg-white shadow-md rounded-lg p-4 h-full">
             <h3 className="text-xl font-semibold mb-4">Customer Growth</h3>
             <Bar data={data} options={options} />
         </div>

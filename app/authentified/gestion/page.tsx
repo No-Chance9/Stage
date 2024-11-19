@@ -14,7 +14,7 @@ export default function GestionUser() {
     }>({
         name: '',
         email: '',
-        index: 1,
+        index: 0,
     });
 
     const handleEmailSelection = (name: string, email: string, index:number) => {

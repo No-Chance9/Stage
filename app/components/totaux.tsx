@@ -22,7 +22,7 @@ export default function Totaux({ sendDataToParent }: any) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-row gap-2">
+      <div className="flex lg:flex-row md:flex-col md:items-center gap-2">
         {values.map((item, index) => (
           <div key={index} className="bg-white shadow-md rounded-lg p-6 w-64">
             <h2 className="text-xl font-bold mb-4">

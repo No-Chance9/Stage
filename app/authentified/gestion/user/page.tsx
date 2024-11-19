@@ -65,8 +65,11 @@ export default function Attribution() {
     adresse: '',
     ville: '',
     code: '',
-    role: 'Admin',
+    role: '',
   });
+
+  // State to control the visibility of the popup
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleValueChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -113,6 +116,11 @@ export default function Attribution() {
       console.log("new values sauvegardés :", modifs);
       console.log("new values sauvegardés :", values);
 
+      // Show the popup for 3 seconds
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+      }, 3000); // 3000ms = 3 seconds
 
       // Mettre à jour `values` avec les nouvelles données sauvegardées
       setValues((prevValues) => ({
@@ -214,7 +222,7 @@ export default function Attribution() {
                   name="role"// Assure-toi que le champ name correspond à la clé dans modifs
                   className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   onChange={handleValueChange}
-                  value={values.role} // Utiliser `modifs.role` pour le contrôle
+                  value={modifs.role || values.role} // Utiliser `modifs.role` pour le contrôle
                 >
                   <option value='Admin'>Admin</option>
                   <option value='Editeur'>Editeur</option>
@@ -252,6 +260,12 @@ export default function Attribution() {
               </button>
             </form>
           </div>
+          {/* Popup */}
+          {showPopup && (
+            <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-md z-50">
+              Données mises à jour
+            </div>
+          )}
         </div>
         <div className="flex justify-end items-center mt-4">
           <button
