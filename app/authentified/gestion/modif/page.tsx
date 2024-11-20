@@ -134,49 +134,52 @@ export default function UserManagementTable({ sendDataToParent }: any) {
             </tr>
           </thead>
           <tbody>
-            {paginatedUsers.map((user, index) => (
-              <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 "
-                  onClick={() => {
-                    sendDataToParent(user.name, user.email, index);
+            {paginatedUsers.map((user, index) => {
+              const globalIndex = (currentPage - 1) * itemsPerPage + index; // Calculate the global index
+              return (
+                <tr key={globalIndex} className="border-b hover:bg-gray-50">
+                  <td className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 "
+                    onClick={() => {
+                      sendDataToParent(user.name, user.email, globalIndex);
+                      window.location.href = "/authentified/gestion/user";
+                    }} >
+                    {user.role}
+                  </td>
+                  <td onClick={() => {
+                    sendDataToParent(user.name, user.email, globalIndex);
                     window.location.href = "/authentified/gestion/user";
-                  }} >
-                  {user.role}
-                </td>
-                <td onClick={() => {
-                  sendDataToParent(user.name, user.email, index);
-                  window.location.href = "/authentified/gestion/user";
-                }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
-                  <Image src={user.profilePictureUrl} alt="avatar" width={30} height={30} className="rounded-full border hover:border-blue-500" />
-                </td>
-                <td onClick={() => {
-                  sendDataToParent(user.name, user.email, index);
-                  window.location.href = "/authentified/gestion/user";
-                }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
-                  {user.email}
-                </td>
-                <td onClick={() => {
-                  sendDataToParent(user.name, user.email, index);
-                  window.location.href = "/authentified/gestion/user";
-                }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
-                  {user.name}
-                </td>
-                <td className="p-4 text-sm text-gray-800">{user.createdAt}</td>
-                <td
-                  className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 flex gap-2">
-                  <a href="/authentified/gestion/user" onClick={() => {
-                    sendDataToParent(user.name, user.email, index);
-                  }}>
-                    <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
-                  </a>
-                  <button onClick={() => {
-                    handleDelete(user.email);
-                  }}>
-                    <FiTrash2 className="text-red-500 cursor-pointer hover:text-red-700" />
-                  </button>
-                </td>
-              </tr>
-            ))}
+                  }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
+                    <Image src={user.profilePictureUrl} alt="avatar" width={30} height={30} className="rounded-full border hover:border-blue-500" />
+                  </td>
+                  <td onClick={() => {
+                    sendDataToParent(user.name, user.email, globalIndex);
+                    window.location.href = "/authentified/gestion/user";
+                  }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
+                    {user.email}
+                  </td>
+                  <td onClick={() => {
+                    sendDataToParent(user.name, user.email, globalIndex);
+                    window.location.href = "/authentified/gestion/user";
+                  }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
+                    {user.name}
+                  </td>
+                  <td className="p-4 text-sm text-gray-800">{user.createdAt}</td>
+                  <td
+                    className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 flex gap-2">
+                    <a href="/authentified/gestion/user" onClick={() => {
+                      sendDataToParent(user.name, user.email, globalIndex);
+                    }}>
+                      <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
+                    </a>
+                    <button onClick={() => {
+                      handleDelete(user.email);
+                    }}>
+                      <FiTrash2 className="text-red-500 cursor-pointer hover:text-red-700" />
+                    </button>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
         <div className="flex justify-self-end justify-end items-center mt-4 bg-white">
