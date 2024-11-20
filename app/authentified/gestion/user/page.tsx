@@ -175,14 +175,7 @@ export default function Attribution() {
     }
   }
 
-  useEffect(() => {
-    // Récupère les informations utilisateur dès que les valeurs sont chargées
-    if (values.email) {
-      fetchUserData();
-    }
-  }, [values.email]);
-
-  const [usersPagi, setUsersPagi] = useState<Array<{}>>([]);
+  const [usersPagi, setUsersPagi] = useState<any>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 1;
@@ -192,7 +185,33 @@ export default function Attribution() {
     setCurrentPage(page);
   };
 
-  const paginatedUsers = usersPagi.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  useEffect(() => {
+    // Récupère les informations utilisateur dès que les valeurs sont chargées
+    fetchUserData();
+  }, [values.email]);
+
+  // const paginatedUsers = usersPagi.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  // Update `values` whenever the current page changes
+  useEffect(() => {
+    if (usersPagi.length > 0) {
+      const user = usersPagi[(currentPage - 1) * itemsPerPage]; // Get the current user
+      if (user) {
+        console.log('url:', values.profilePictureUrl)
+        setValues((prevValues) => ({
+          ...prevValues,
+          name: user.name,
+          email: user.email,
+          surname: user.surname || '',
+          adresse: user.adresse || '',
+          ville: user.ville || '',
+          code: user.code || '',
+          role: user.role || '',
+          profilePictureUrl: '' ,
+        }));
+      }
+    }
+  }, [currentPage, usersPagi]);
 
   return (
     <>
@@ -205,12 +224,11 @@ export default function Attribution() {
 
       <div className="overflow-x-auto grid m-6">
         <div className='flex flex-col bg-white justify-between items-center p-4'>
-          {/* {users.map((user) => ( */}
           <div>
             {values.profilePictureUrl ?
               (<Image src={values.profilePictureUrl} alt="avatar" width={191} height={191} className="rounded-full " />)
               :
-              (<p>Pas de photo de profil</p>)}
+              (<Image src='/images/Union.svg' alt="avatar" width={191} height={191} className="rounded-full " />)}
           </div>
           <UploadForm />
           <div className="max-w-md mx-auto p-6">
