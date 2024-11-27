@@ -5,6 +5,7 @@ export interface BestDocument {
     name: string;
     price: string;
     sold: string;
+    stock: number;
     status: string;
     statusColor: string;
     createdAt: Date;
@@ -23,6 +24,11 @@ const BestSchema = new Schema<BestDocument>({
     sold: {
         type: String,
         required: true,
+    },
+    stock: {
+        type: Number, // Assurez-vous que c'est un Number
+        required: true,
+        min: 0, // Ne peut pas être négatif
     },
     status: {
         type: String,

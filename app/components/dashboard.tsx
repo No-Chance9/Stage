@@ -68,7 +68,7 @@ export const Dashboard = () => {
 
         const csvRows3 = [
             keys3,
-            ...dataGlobal.bestSelling.map((item: any) => [item.name, item.price, item.sold, item.status]),
+            ...dataGlobal.bestSelling.map((item: any) => [item.name, item.price, item.stock, item.sold, item.status]),
         ];
 
         const csvRows4 = [
