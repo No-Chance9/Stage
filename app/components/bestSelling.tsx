@@ -21,6 +21,19 @@ export default function BestSelling({ sendDataToParent }: any) {
         fetchValues();
     }, []);
 
+    const getStatusClass = (status: any) => {
+        switch (status) {
+            case "In Stock":
+                return "bg-green-200 text-green-800";
+            case "Out of Stock":
+                return "bg-red-200 text-red-800";
+            case "Low quantity":
+                return "bg-yellow-200 text-yellow-800";
+            default:
+                return "bg-gray-200 text-gray-800";
+        }
+    };
+
     return (
         <div className="bg-white shadow-md rounded-lg p-5">
             <div className="flex justify-between mb-4">
@@ -43,8 +56,7 @@ export default function BestSelling({ sendDataToParent }: any) {
                                 <td className="p-2">{product.name}</td>
                                 <td className="p-2">{product.price}</td>
                                 <td className="p-2">{product.sold}</td>
-                                <td className={`p-2 ${product.statusColor}`}>{product.status}</td>
-                                {/* <td className='p-2 text-green-600'>{product.status}</td> */}
+                                <td className={`p-2 ${getStatusClass(product.status)}`}>{product.status}</td>
                             </tr>
                         ))}
                     </tbody>

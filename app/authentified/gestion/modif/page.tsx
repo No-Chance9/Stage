@@ -95,6 +95,12 @@ export default function UserManagementTable({ sendDataToParent }: any) {
 
   // Soft delete function
   const handleDelete = async (email: string) => {
+    
+    const userConfirmed = window.confirm("Êtes-vous sûr de vouloir supprimer l'utilisateur ?");
+    if (!userConfirmed) {
+      return; // Si l'utilisateur clique sur "Annuler", on sort de la fonction
+    }
+
     try {
       const res = await fetch("/api/users", {
         method: "DELETE",
@@ -134,6 +140,34 @@ export default function UserManagementTable({ sendDataToParent }: any) {
   };
 
   const paginatedUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const getPaginatedPages = () => {
+    const maxVisiblePages = 5; // Nombre maximum de pages visibles à la fois (hors début/fin)
+    const pages = [];
+    const totalPagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    if (totalPages <= maxVisiblePages + 2) {
+      // Affiche tout si les pages totales sont inférieures au seuil
+      return totalPagesArray;
+    }
+
+    if (currentPage <= 3) {
+      // Montre les premières pages
+      pages.push(...totalPagesArray.slice(0, maxVisiblePages));
+      pages.push('...', totalPages); // Points + Dernière page
+    } else if (currentPage > totalPages - 3) {
+      // Montre les dernières pages
+      pages.push(1, '...');
+      pages.push(...totalPagesArray.slice(totalPages - maxVisiblePages));
+    } else {
+      // Pages intermédiaires
+      pages.push(1, '...');
+      pages.push(...totalPagesArray.slice(currentPage - 1, currentPage + 1));
+      pages.push('...', totalPages);
+    }
+
+    return pages;
+  };
 
   return (
     <>
@@ -239,14 +273,20 @@ export default function UserManagementTable({ sendDataToParent }: any) {
           >
             &lt;
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-            <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`px-3 py-1 mx-1 text-sm ${page === currentPage ? 'text-blue-500 font-bold' : 'text-gray-700 hover:text-gray-900'}`}
-            >
-              {page}
-            </button>
+          {getPaginatedPages().map((page, index) => (
+            typeof page === 'number' ? (
+              <button
+                key={index}
+                onClick={() => handlePageChange(page)}
+                className={`px-3 py-1 mx-1 text-sm ${page === currentPage ? 'text-blue-500 font-bold' : 'text-gray-700 hover:text-gray-900'}`}
+              >
+                {page}
+              </button>
+            ) : (
+              <span key={index} className="px-3 py-1 mx-1 text-sm text-gray-500">
+                ...
+              </span>
+            )
           ))}
           <button
             onClick={() => handlePageChange(currentPage + 1)}

@@ -5,6 +5,8 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
 import Image from 'next/image';
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 
 const navigation = [
@@ -18,8 +20,9 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
-
 export default function Header() {
+    const router = useRouter();
+
     const [photoProfil, setPhotoProfil] = useState<string>('/images/Union.svg');
 
     const { data: session } = useSession();
@@ -45,6 +48,11 @@ export default function Header() {
         fetchValues();
     }, [user]);
 
+    // Function to handle sign out
+    const handleSignOut = async () => {
+        await signOut({ redirect: false });
+        router.push('/');
+    };
 
     return (
         <Disclosure as="nav" className="bg-white border border-transparent border-l-slate-50  ">
@@ -93,16 +101,20 @@ export default function Header() {
                             </div>
                             <MenuItems
                                 transition
-                                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
+                                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 "
                             >
                                 <MenuItem>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700">Your Profile</a>
+                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">Your Profile</a>
                                 </MenuItem>
                                 <MenuItem>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700">Settings</a>
+                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">Settings</a>
                                 </MenuItem>
                                 <MenuItem>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700">Sign out</a>
+                                    <a href="#"
+                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                                        onClick={handleSignOut}>
+                                        Sign out
+                                    </a>
                                 </MenuItem>
                             </MenuItems>
                         </Menu>
