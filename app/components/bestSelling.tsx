@@ -2,7 +2,7 @@ import React from 'react';
 import 'chart.js/auto';
 import { useEffect, useState } from "react";
 
-export default function BestSelling({sendDataToParent}:any) {
+export default function BestSelling({ sendDataToParent }: any) {
     const [values, setValues] = useState<any[]>([]);
 
     const fetchValues = async () => {
@@ -43,7 +43,8 @@ export default function BestSelling({sendDataToParent}:any) {
                                 <td className="p-2">{product.name}</td>
                                 <td className="p-2">{product.price}</td>
                                 <td className="p-2">{product.sold}</td>
-                                <td className={`p-2 list-disc ${product.statusColor}`}>{product.status}</td>
+                                <td className={`p-2 ${product.statusColor}`}>{product.status}</td>
+                                {/* <td className='p-2 text-green-600'>{product.status}</td> */}
                             </tr>
                         ))}
                     </tbody>

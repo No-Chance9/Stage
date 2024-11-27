@@ -47,8 +47,10 @@ export default function Login() {
                             className="w-full h-8 border bg-slate-200 border-solid border-black rounded p-2"
                             name="password" />
                     </div>
-                    <a href="">Mot de passe oublié</a>
-                    <button className="flex justify-center border border-solid w-full text-white bg-blue-800 border-black rounded-lg">
+                    <a href="/forgot-password" className="hover:text-blue-600 hover:underline">
+                        Mot de passe oublié
+                    </a>
+                    <button className="flex justify-center border border-solid w-full text-white bg-blue-800 border-black rounded-lg ">
                         <p className="m-2">Login</p>
                     </button>
                     <Link

@@ -1,5 +1,5 @@
 "use client";
-import { FormEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { register } from "@/actions/register";
@@ -10,45 +10,46 @@ export default function Register() {
     const ref = useRef<HTMLFormElement>(null);
 
     const handleSubmit = async (formData: FormData) => {
-        const r = await register({
+        const result = await register({
             email: formData.get("email"),
             password: formData.get("password"),
             name: formData.get("name"),
             surname: formData.get("surname"),
         });
-        ref.current?.reset();
-        if (r?.error) {
-            setError(r.error);
-            return;
+
+        if (result?.error) {
+            setError(result.error); // Afficher le message d'erreur renvoyé par le backend
         } else {
+            ref.current?.reset();
             return router.push("/login");
         }
     };
+
     return (
         <div className="flex flex-col max-w-7xl mx-auto h-screen relative">
             <section className="w-full h-1/2 bg-blue-800 flex items-center justify-center">
-                <form ref={ref}
+                <form
+                    ref={ref}
                     action={handleSubmit}
                     className="p-6 absolute bottom-60 w-full max-w-[500px] flex flex-col justify-between items-center gap-2
-                    border border-solid border-black bg-white rounded-lg">
-                    {error && <div className="">{error}</div>}
+                    border border-solid border-black bg-white rounded-lg"
+                >
+                    {error && <div className="text-red-600">{error}</div>}
                     <h1 className="flex justify-center mb-5 w-full text-2xl font-bold">Register</h1>
                     <div className="flex flex-row flex-auto w-full gap-2">
                         <div className="flex flex-col flex-1">
-                            <label className=" text-sm">Name</label>
+                            <label className="text-sm">Name</label>
                             <input
                                 type="text"
-                                // placeholder="Name"
-                                className=" bg-slate-200 h-8 border border-solid border-black flex-1 py-1 px-2.5 rounded text-[13px]"
+                                className="bg-slate-200 h-8 border border-solid border-black flex-1 py-1 px-2.5 rounded text-[13px]"
                                 name="name"
                             />
                         </div>
                         <div className="flex flex-col flex-1">
-                            <label className=" text-sm"> Surname</label>
+                            <label className="text-sm">Surname</label>
                             <input
                                 type="text"
-                                // placeholder="Surname"
-                                className=" bg-slate-200 h-8 border border-solid border-black flex-1 py-1 px-2.5 rounded text-[13px]"
+                                className="bg-slate-200 h-8 border border-solid border-black flex-1 py-1 px-2.5 rounded text-[13px]"
                                 name="surname"
                             />
                         </div>
@@ -56,7 +57,6 @@ export default function Register() {
                     <label className="w-full text-sm">Email</label>
                     <input
                         type="email"
-                        // placeholder="Email"
                         className="w-full bg-slate-200 h-8 border border-solid border-black py-1 px-2.5 rounded"
                         name="email"
                     />
@@ -64,13 +64,13 @@ export default function Register() {
                     <div className="flex w-full">
                         <input
                             type="password"
-                            // placeholder="Password"
                             className="w-full bg-slate-200 h-8 border border-solid border-black py-1 px-2.5 rounded"
                             name="password"
                         />
                     </div>
-                    <button className="w-full border border-solid border-black py-1.5 mt-2.5 rounded
-                    text-white bg-blue-800">
+                    <button
+                        className="w-full border border-solid border-black py-1.5 mt-2.5 rounded text-white bg-blue-800"
+                    >
                         Sign up
                     </button>
                     <Link href="/login" className="text-sm text-[#888] transition duration-150 ease hover:text-black">
@@ -78,9 +78,7 @@ export default function Register() {
                     </Link>
                 </form>
             </section>
-            <section className="bg-indigo-100 h-1/2">
-            </section>
+            <section className="bg-indigo-100 h-1/2"></section>
         </div>
-    )
+    );
 }
-

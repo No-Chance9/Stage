@@ -21,8 +21,12 @@ export default function UserManagementTable({ sendDataToParent }: any) {
       profilePictureUrl: string;
       email: string;
       createdAt: string;
+      originalIndex: number
     }>
   >([]);
+
+  const [filteredUsers, setFilteredUsers] = useState<typeof users>([]); // Filtered users
+  const [searchQuery, setSearchQuery] = useState<string>(''); // Search query state
 
   const fetchValues = async () => {
     try {
@@ -31,7 +35,7 @@ export default function UserManagementTable({ sendDataToParent }: any) {
 
       // Fetch each profile picture based on profilePictureId
       const usersWithImages = await Promise.all(
-        data.map(async (user: any) => {
+        data.map(async (user: any, index: number) => {
           let profilePictureUrl = "/images/Union.svg"; // Fallback URL if no profile picture
 
           if (user.profilePicture) {
@@ -52,11 +56,13 @@ export default function UserManagementTable({ sendDataToParent }: any) {
             profilePictureUrl,
             email: user.email,
             createdAt: user.createdAt || "05/12/2023", // Use a default if createdAt is missing
+            originalIndex: index, // Ajoutez l'index original
           };
         })
       );
 
       setUsers(usersWithImages);
+      setFilteredUsers(usersWithImages); // Initialize filtered users with all users
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -65,6 +71,27 @@ export default function UserManagementTable({ sendDataToParent }: any) {
   useEffect(() => {
     fetchValues();
   }, []);
+
+  useEffect(() => {
+    // Filter users whenever the search query changes
+    const lowerCaseQuery = searchQuery.toLowerCase();
+
+    setFilteredUsers(
+      users.filter(
+        (user) =>
+          user.name.toLowerCase().includes(lowerCaseQuery) ||
+          user.email.toLowerCase().includes(lowerCaseQuery)
+      )
+    );
+  }, [searchQuery, users]);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value); // Update search query state
+  };
+
+  // State to control the visibility of the popup
+  const [showPopup, setShowPopup] = useState(false);
+
 
   // Soft delete function
   const handleDelete = async (email: string) => {
@@ -83,6 +110,13 @@ export default function UserManagementTable({ sendDataToParent }: any) {
 
         // Update the local state to remove the user or set isActive to false
         setUsers((prevUsers) => prevUsers.filter((user) => user.email !== email));
+        setFilteredUsers((prevUsers) => prevUsers.filter((user) => user.email !== email));
+
+        // Show the popup for 3 seconds
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+        }, 3000); // 3000ms = 3 seconds
       } else {
         console.error("Failed to delete user:", res.statusText);
       }
@@ -93,13 +127,13 @@ export default function UserManagementTable({ sendDataToParent }: any) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  const paginatedUsers = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <>
@@ -118,8 +152,10 @@ export default function UserManagementTable({ sendDataToParent }: any) {
             </span>
             <input
               type="text"
-              placeholder="Search or type a command"
-              className="block pl-10 pr-3 py-2 rounded-full bg-gray-100 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 " />
+              placeholder="Search a user"
+              className="block pl-10 pr-3 py-2 rounded-full bg-gray-100 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 "
+              onChange={handleSearchChange}
+            />
           </div>
         </div>
         <table className="min-w-full bg-white">
@@ -135,7 +171,7 @@ export default function UserManagementTable({ sendDataToParent }: any) {
           </thead>
           <tbody>
             {paginatedUsers.map((user, index) => {
-              const globalIndex = (currentPage - 1) * itemsPerPage + index; // Calculate the global index
+              const globalIndex = user.originalIndex; // Utilisez `originalIndex`
               return (
                 <tr key={globalIndex} className="border-b hover:bg-gray-50">
                   <td className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 "
@@ -181,6 +217,12 @@ export default function UserManagementTable({ sendDataToParent }: any) {
               )
             })}
           </tbody>
+          {/* Popup */}
+          {showPopup && (
+            <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-md z-50">
+              Utilisateur supprimé avec succes
+            </div>
+          )}
         </table>
         <div className="flex justify-self-end justify-end items-center mt-4 bg-white">
           <button
