@@ -3,16 +3,28 @@ import User from "@/models/User";
 import { error } from "console";
 import { NextResponse, NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     await connectDB();
     try {
-        // const activeUsers = await User.find({isActive: true});
-        const activeUsers = await User.find({isActive: true});
+        const { searchParams } = new URL(request.url); // Extract query parameters
+        const email = searchParams.get("email"); // Check for the `email` parameter
 
-        return NextResponse.json(activeUsers);
+        if (email) {
+            // If an email parameter is provided, fetch the specific user
+            const user = await User.findOne({ email, isActive: true });
 
+            if (!user) {
+                return NextResponse.json({ error: "User not found" }, { status: 404 });
+            }
+
+            return NextResponse.json(user);
+        } else {
+            // If no email is provided, return all active users
+            const activeUsers = await User.find({ isActive: true });
+            return NextResponse.json(activeUsers);
+        }
     } catch (err: any) {
-        return NextResponse.json({ error: err.message });
+        return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
 

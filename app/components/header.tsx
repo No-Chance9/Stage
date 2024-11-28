@@ -54,6 +54,12 @@ export default function Header() {
         router.push('/');
     };
 
+    const navigateToProfile = () => {
+        if (user) {
+            router.push(`/authentified/yourprofile?email=${user.email}`);
+        }
+    };
+    
     return (
         <Disclosure as="nav" className="bg-white border border-transparent border-l-slate-50  ">
             <div className="mx-auto  px-2 sm:px-6 lg:px-8">
@@ -104,7 +110,12 @@ export default function Header() {
                                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 "
                             >
                                 <MenuItem>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">Your Profile</a>
+                                    <button
+                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
+                                        onClick={navigateToProfile}
+                                    >
+                                        Your Profile
+                                    </button>
                                 </MenuItem>
                                 <MenuItem>
                                     <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">Settings</a>

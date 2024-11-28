@@ -21,9 +21,9 @@ export default function AuthentifiedLayout({
         // <Provider>
         <SidebarUse >
             <Header />
-            <div className="flex justify-center">
+            {/* <div className="flex justify-center">
                 <SignOutButton />
-            </div>
+            </div> */}
             {children}
         </SidebarUse>
         // </Provider>
