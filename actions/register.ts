@@ -24,6 +24,7 @@ export const register = async (values: any) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10); // Hachage uniquement après validation
+        
         const user = new User({
             name,
             email,
