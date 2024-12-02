@@ -3,8 +3,8 @@ import mongoose, { Schema, model } from "mongoose";
 export interface BestDocument {
     _id: string;
     name: string;
-    price: string;
-    sold: string;
+    price: number;
+    sold: number;
     stock: number;
     status: string;
     statusColor: string;
@@ -12,31 +12,31 @@ export interface BestDocument {
     updatedAt: Date;
 }
 
-const BestSchema = new Schema<BestDocument>({
+const BestSchema = new mongoose.Schema<BestDocument>({
     name: {
         type: String,
         required: true,
     },
     price: {
-        type: String,
+        type: Number,
         required: true,
     },
     sold: {
-        type: String,
+        type: Number,
         required: true,
+        default:0
     },
     stock: {
         type: Number, // Assurez-vous que c'est un Number
         required: true,
         min: 0, // Ne peut pas être négatif
+        default:0
     },
     status: {
         type: String,
-        required: true,
     },
     statusColor: {
         type: String,
-        required: true,
     },
 });
 

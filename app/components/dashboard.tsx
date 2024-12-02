@@ -37,6 +37,18 @@ export const Dashboard = () => {
         }
     };
 
+    const [newLabel, setNewLabel] = useState(''); // State for new label
+
+    const LabelFromCustomer = (newLabel: any) => {
+        setNewLabel(newLabel);
+    }
+
+    const [newProduct, setnewProduct] = useState(''); // State for new label
+
+    const ProductFromCustomer = (newProduct: any) => {
+        setnewProduct(newProduct);
+    }
+
     // Les noms de champs en excluant les champs superflus
     const keys = dataGlobal.customerGrowthData[0] ?
         Object.keys(dataGlobal.customerGrowthData[0]).filter(key => !["_id", "__v"].includes(key)).map(key => key.toUpperCase())
@@ -99,7 +111,7 @@ export const Dashboard = () => {
 
             <section className="grid grid-cols-1 gap-6 mb-6">
                 <div className=" bg-gray-100 dark:bg-neutral-800 p-6 md:items-center rounded-lg shadow">
-                    <Totaux sendDataToParent={(data: any) => dataFromCustomer(data, "totaux")} />
+                    <Totaux sendDataToParent={(data: any) => dataFromCustomer(data, "totaux")} newLabel={newLabel} newProduct={newProduct}/>
                 </div>
             </section>
 
@@ -108,10 +120,13 @@ export const Dashboard = () => {
                     <CustomerGrowthChart sendDataToParent={(data: any) => dataFromCustomer(data, "customerGrowth")} />
                 </div>
                 <div className="bg-gray-100 dark:bg-neutral-800 p-6 rounded-lg shadow">
-                    <YearlyVisitorsChart sendDataToParent={(data: any) => dataFromCustomer(data, "yearlyVisitors")} />
+                    <YearlyVisitorsChart
+                        sendDataToParent={(data: any) => dataFromCustomer(data, "yearlyVisitors")}
+                        sendLabelToparent={(newLabel: any) => LabelFromCustomer(newLabel)} />
                 </div>
                 <div className="lg:col-span-3 bg-gray-100 dark:bg-neutral-800 p-6 rounded-lg shadow">
-                    <BestSelling sendDataToParent={(data: any) => dataFromCustomer(data, "bestSelling")} />
+                    <BestSelling sendDataToParent={(data: any) => dataFromCustomer(data, "bestSelling")}
+                    sendProductToparent={(newProduct: any) => ProductFromCustomer(newProduct)} />
                 </div>
             </section>
         </main>

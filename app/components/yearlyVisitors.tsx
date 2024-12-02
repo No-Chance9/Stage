@@ -4,7 +4,7 @@ import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import { MinusCircleIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-export const YearlyVisitorsChart = ({ sendDataToParent }: any) => {
+export const YearlyVisitorsChart = ({ sendDataToParent, sendLabelToparent }: any) => {
     const [chartData, setChartData] = useState<{
         labels: string[];
         visitors: number[];
@@ -22,7 +22,6 @@ export const YearlyVisitorsChart = ({ sendDataToParent }: any) => {
     const [newVisitor, setNewVisitor] = useState<number | "">(""); // Input state for visitor count
 
     const [error, setError] = useState(""); // Error message state
-
 
     const fetchValues = async () => {
         try {
@@ -79,6 +78,8 @@ export const YearlyVisitorsChart = ({ sendDataToParent }: any) => {
                 visitors: [...prevData.visitors, result.value],
             }));
 
+            sendLabelToparent(newLabel);
+
             // Clear input fields
             setNewLabel("");
             setNewVisitor("");
@@ -106,6 +107,8 @@ export const YearlyVisitorsChart = ({ sendDataToParent }: any) => {
                 labels: prevData.labels.filter((l) => l !== label), // Supprimer le label correspondant
                 visitors: prevData.visitors.filter((_, index) => prevData.labels[index] !== label), // Supprimer le visiteur correspondant
             }));
+
+            sendLabelToparent(newLabel);
         } catch (error) {
             console.error("Error deleting label:", error);
         }
