@@ -12,6 +12,7 @@ export interface UserDocument {
     adresse: string;
     ville: string;
     code: number;
+    dashboardId?: mongoose.Types.ObjectId
     profilePicture?: mongoose.Types.ObjectId;
     resetPasswordToken: string;
     resetPasswordExpires: Date | null;
@@ -72,6 +73,10 @@ const UserSchema = new Schema<UserDocument>({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProfilePicture',
     }, // Référence à une image
+    dashboardId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'dashboardId',
+    },//Ref du dashboard perso
     resetPasswordToken: {
         type: String,
     },
