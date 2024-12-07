@@ -13,6 +13,8 @@ import { useFormSubmitContext } from '@/app/components/FormSubmitContext';
 export default function Header() {
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
+    const [isImageHidden, setIsImageHidden] = useState(true);
+
     const router = useRouter();
 
     const [photoProfil, setPhotoProfil] = useState<string>('/images/Union.svg');
@@ -54,6 +56,19 @@ export default function Header() {
         }
     };
 
+    const handlePointRouge = () => {
+        setIsImageHidden(true)
+    }
+
+    // Basculer isImageHidden à false uniquement lors de modifications de formSubmitFromChildren
+    useEffect(() => {
+        if (formSubmitFromChildren.length > 0) {
+            setIsImageHidden(false);
+        }
+    }, [formSubmitFromChildren]);
+
+
+
     return (
         <Disclosure as="nav" className="bg-white border border-transparent border-l-slate-50">
             <div className="mx-auto px-2 sm:px-6 lg:px-8">
@@ -82,28 +97,34 @@ export default function Header() {
                         <div className="relative">
                             <button
                                 type="button"
-                                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                                className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                onClick={() => {
+                                    setIsNotificationOpen(!isNotificationOpen);
+                                    handlePointRouge();
+                                }}
+                                className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 static"
                             >
                                 <span className="sr-only">View notifications</span>
-                                <BellIcon aria-hidden="true" className="h-6 w-6" />
+                                <BellIcon aria-hidden="true" className="h-6 w-6 " />
+                                <Image src='/images/pointRouge.svg' alt='' width={12} height={12}
+                                    className={`absolute top-0 left-1 ${isImageHidden ? 'hidden' : ''}`}
+                                />
                             </button>
                             {isNotificationOpen && (
                                 <div className="absolute right-0 mt-2 w-64 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                                    <div className="max-h-48 overflow-y-auto">
+                                    <ul className="max-h-48 overflow-y-auto">
                                         {formSubmitFromChildren.length > 0 ? (
                                             formSubmitFromChildren.map((notification, index) => (
-                                                <div
+                                                <li
                                                     key={index}
-                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-b-2"
                                                 >
-                                                    {notification}
-                                                </div>
+                                                    Vous avez ajouté un nouveau produit <strong>"{notification}"</strong>
+                                                </li>
                                             ))
                                         ) : (
                                             <div className="block px-4 py-2 text-sm text-gray-700">No notifications</div>
                                         )}
-                                    </div>
+                                    </ul>
                                 </div>
                             )}
                         </div>
@@ -152,6 +173,6 @@ export default function Header() {
                     </div>
                 </div>
             </div>
-        </Disclosure>
+        </Disclosure >
     );
 }
