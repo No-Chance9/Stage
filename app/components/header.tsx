@@ -7,20 +7,12 @@ import { useSession } from "next-auth/react";
 import Image from 'next/image';
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useFormSubmitContext } from '@/app/components/FormSubmitContext';
 
-
-const navigation = [
-    { name: 'Dashboard', href: '#', current: true },
-    { name: 'Team', href: '#', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
-];
-
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ');
-}
 
 export default function Header() {
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+
     const router = useRouter();
 
     const [photoProfil, setPhotoProfil] = useState<string>('/images/Union.svg');
@@ -28,6 +20,8 @@ export default function Header() {
     const { data: session } = useSession();
 
     const user = session?.user;
+
+    const { formSubmitFromChildren } = useFormSubmitContext();
 
     console.log("full data", user);
     console.log("photo profil default", photoProfil);
@@ -59,16 +53,14 @@ export default function Header() {
             router.push(`/authentified/yourprofile?email=${user.email}`);
         }
     };
-    
+
     return (
-        <Disclosure as="nav" className="bg-white border border-transparent border-l-slate-50  ">
-            <div className="mx-auto  px-2 sm:px-6 lg:px-8">
+        <Disclosure as="nav" className="bg-white border border-transparent border-l-slate-50">
+            <div className="mx-auto px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
 
+                    {/* Left Side (Search bar) */}
                     <div className="relative flex items-center w-full max-w-xs">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                        </span>
                         <input
                             type="text"
                             placeholder="Search or type a command"
@@ -76,38 +68,62 @@ export default function Header() {
                         />
                     </div>
 
+                    {/* Right Side (Icons and Dropdowns) */}
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                        {/* Settings and Notifications */}
+                        {/* Settings */}
                         <button
                             type="button"
                             className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                         >
                             <Cog6ToothIcon aria-hidden="true" className="h-6 w-6" />
                         </button>
-                        <button
-                            type="button"
-                            className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                        >
-                            <span className="sr-only">View notifications</span>
-                            <BellIcon aria-hidden="true" className="h-6 w-6" />
-                        </button>
+
+                        {/* Notifications */}
+                        <div className="relative">
+                            <button
+                                type="button"
+                                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                                className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                            >
+                                <span className="sr-only">View notifications</span>
+                                <BellIcon aria-hidden="true" className="h-6 w-6" />
+                            </button>
+                            {isNotificationOpen && (
+                                <div className="absolute right-0 mt-2 w-64 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                                    <div className="max-h-48 overflow-y-auto">
+                                        {formSubmitFromChildren.length > 0 ? (
+                                            formSubmitFromChildren.map((notification, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                >
+                                                    {notification}
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="block px-4 py-2 text-sm text-gray-700">No notifications</div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
 
                         {/* Profile dropdown */}
                         <Menu as="div" className="relative ml-3">
                             <div>
                                 <MenuButton className="relative flex rounded-full bg-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2">
-                                    <span className="sr-only">Open user menu</span>
                                     <Image
                                         alt=""
                                         src={photoProfil}
-                                        width={30} height={30}
+                                        width={30}
+                                        height={30}
                                         className="h-8 w-8 rounded-full"
                                     />
                                 </MenuButton>
                             </div>
                             <MenuItems
                                 transition
-                                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 "
+                                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
                             >
                                 <MenuItem>
                                     <button
@@ -118,12 +134,16 @@ export default function Header() {
                                     </button>
                                 </MenuItem>
                                 <MenuItem>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">Settings</a>
+                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">
+                                        Settings
+                                    </a>
                                 </MenuItem>
                                 <MenuItem>
-                                    <a href="#"
+                                    <a
+                                        href="#"
                                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100"
-                                        onClick={handleSignOut}>
+                                        onClick={handleSignOut}
+                                    >
                                         Sign out
                                     </a>
                                 </MenuItem>

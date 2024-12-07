@@ -9,12 +9,12 @@ import { useEffect, useState } from "react";
 export const CustomerGrowthChart = ( {sendDataToParent}:any ) => {
 
     const [chartData, setChartData] = useState<{
-        labels: string[],
+        months: string[],
         menCustomer: number[],
         womenCustomer: number[],
         newCustomer: number[]
     }>({
-        labels: [],
+        months: [],
         menCustomer: [],
         womenCustomer: [],
         newCustomer: []
@@ -26,13 +26,13 @@ export const CustomerGrowthChart = ( {sendDataToParent}:any ) => {
             const data = await res.json();
 
             // Extract the values from the fetched data
-            const labels = data.map((item: any) => item.month);
+            const months = data.map((item: any) => item.month);
             const menCustomer = data.map((item: any) => item.menCustomer);
             const womenCustomer = data.map((item: any) => item.womenCustomer);
             const newCustomer = data.map((item: any) => item.newCustomer);
 
             // Update chart data
-            setChartData({ labels, menCustomer, womenCustomer, newCustomer });
+            setChartData({ months, menCustomer, womenCustomer, newCustomer });
 
             // Pass data to parent component
             sendDataToParent(data);
@@ -47,7 +47,7 @@ export const CustomerGrowthChart = ( {sendDataToParent}:any ) => {
 
 
     const data = {
-        labels: chartData.labels,
+        labels: chartData.months,
         datasets: [
             {
                 label: 'Men Customer',

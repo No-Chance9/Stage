@@ -40,13 +40,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json(savedYearly);
     } catch (err: any) {
-        // Gérer les erreurs de duplication de clé
-        if (err.code === 11000) { // E11000 est le code d'erreur pour duplicate key
-            return NextResponse.json(
-                { error: "Label already exists." },
-                { status: 400 }
-            );
-        }
+        return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { MinusCircleIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-export default function BestSelling({ sendDataToParent, sendProductToparent }: any) {
+export default function BestSelling({ data, setformSubmitFromChildren}: any) {
     const [values, setValues] = useState<
         Array<{
             name: string;
@@ -27,24 +27,15 @@ export default function BestSelling({ sendDataToParent, sendProductToparent }: a
 
     const [error, setError] = useState<string | null>(null); // Gestion des erreurs
 
-    // Récupération des données de la base de données
-    const fetchValues = async () => {
-        try {
-            const res = await fetch("/api/bestSellings");
-            if (!res.ok) throw new Error("Failed to fetch best-selling products.");
-            const data = await res.json();
-            setValues(data);
-            sendDataToParent(data);
-        } catch (error) {
-            console.error("Error fetching best-selling products:", error);
-        }
-    };
+    // const [formSubmit, setFormSubmit] = useState('test');
 
     useEffect(() => {
-        fetchValues();
-    }, []);
+        // Synchroniser les données locales avec les props 'data'
+        if (data?.bestSelling) {
+            setValues(data.bestSelling);
+        }
+    }, [data]);
 
-    // Calcul du statut et de la classe CSS pour le stock
     const getStockStatus = (stock: number) => {
         if (stock === 0) return { status: "Out of Stock", class: "bg-red-200 text-red-800" };
         if (stock > 0 && stock <= 10) return { status: "Low Stock", class: "bg-yellow-200 text-yellow-800" };
@@ -52,58 +43,51 @@ export default function BestSelling({ sendDataToParent, sendProductToparent }: a
         return { status: "High Stock", class: "bg-blue-200 text-blue-800" };
     };
 
-    // Mise à jour du stock
-    const updateStock = async (name: string, newStock: number) => {
-        const stockInfo = getStockStatus(newStock);
-
+    const handleModif = async (index: number, field: string, value: number) => {
         try {
-            const response = await fetch("/api/bestSellings", {
+            const response = await fetch(`/api/dashboards/${data._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    name,
-                    stock: newStock,
-                    status: stockInfo.status,
+                    type: "bestSelling",
+                    index,
+                    [field]: value,
                 }),
             });
 
-            if (!response.ok) throw new Error("Failed to update stock.");
+            if (!response.ok) throw new Error(`Failed to update ${field}.`);
 
-            const updatedProduct = await response.json();
+            const updatedDashboard = await response.json();
 
             // Mise à jour locale
-            setValues((prevValues) =>
-                prevValues.map((product) =>
-                    product.name === updatedProduct.name
-                        ? { ...product, stock: updatedProduct.stock, status: updatedProduct.status }
-                        : product
-                )
-            );
+            setValues(updatedDashboard.bestSelling);
         } catch (error) {
-            console.error("Error updating stock:", error);
-            alert("Failed to update stock. Please try again.");
+            console.error(`Error updating ${field}:`, error);
+            alert(`Failed to update ${field}. Please try again.`);
         }
     };
 
-    // Suppression d'un produit
-    const handleDelete = async (name: string) => {
+    const handleDelete = async (index: number) => {
         try {
-            const response = await fetch("/api/bestSellings", {
+            const response = await fetch(`/api/dashboards/${data._id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ name }),
+                body: JSON.stringify({
+                    type: "bestSelling",
+                    index,
+                }),
             });
 
             if (!response.ok) throw new Error("Failed to delete product.");
 
-            // Mise à jour locale
-            setValues((prevValues) => prevValues.filter((product) => product.name !== name));
+            const updatedDashboard = await response.json();
 
-            sendProductToparent(newProduct);
+            // Mise à jour locale
+            setValues(updatedDashboard.bestSelling);
         } catch (error) {
             console.error("Error deleting product:", error);
             alert("Failed to delete product. Please try again.");
@@ -112,45 +96,59 @@ export default function BestSelling({ sendDataToParent, sendProductToparent }: a
 
     // Ajout d'un nouveau produit
     const handleAddData = async () => {
-        if (!newProduct.name.trim() || !newProduct.price || !newProduct.sold || !newProduct.stock) {
-            setError("All fields are required and must be valid.");
-            return;
-        }
+        // if (!newProduct.name.trim() || !newProduct.price || !newProduct.sold || !newProduct.stock) {
+        //     setError("All fields are required and must be valid.");
+        //     return;
+        // }
 
         setError(null); // Clear errors
 
         try {
-            const response = await fetch("/api/bestSellings", {
+            const response = await fetch(`/api/dashboards/${data._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    name: newProduct.name,
-                    price: Number(newProduct.price),
-                    sold: Number(newProduct.sold),
-                    stock: Number(newProduct.stock),
+                    type: "bestSelling",
+                    data: {
+                        name: newProduct.name,
+                        price: Number(newProduct.price),
+                        sold: Number(newProduct.sold),
+                        stock: Number(newProduct.stock),
+                    }
+
                 }),
             });
 
-            if (!response.ok) throw new Error("Failed to add new product.");
+            if (!response.ok) {
+                // Extraire le message d'erreur de la réponse JSON
+                const errorData = await response.json();
+                setError(errorData.error || "Failed to add new product.");
+                return; // Stop further execution
+            }
 
-            const result = await response.json();
+            const updatedDashboard = await response.json();
 
-            // Mise à jour locale
-            setValues((prevValues) => [...prevValues, result]);
-
-            sendProductToparent(newProduct);
+            // Mise à jour locale instantanée
+            setValues(updatedDashboard.bestSelling);
 
             // Réinitialisation du formulaire
             setNewProduct({ name: "", price: "", sold: "", stock: "" });
-            setIsFormOpen(false); // Fermeture du formulaire
-        } catch (error: any) {
-            console.error("Error adding new product:", error);
-            setError(error.message);
-        }
-    };
 
+            console.log("Submitted name:", newProduct.name); // Vérifiez que c'est une chaîne
+            console.log("Setting formSubmitFromChildren:", newProduct.name);
+
+            if (setformSubmitFromChildren) {
+                setformSubmitFromChildren(newProduct.name);
+            }
+            
+            // Fermeture du formulaire
+            // setIsFormOpen(false); 
+
+        } catch (err: any) {
+            setError(err.message || "An unexpected error occurred.");        }
+    };
     return (
         <div className="bg-white shadow-md rounded-lg p-5">
             <div className="flex justify-between mb-4">
@@ -216,38 +214,49 @@ export default function BestSelling({ sendDataToParent, sendProductToparent }: a
                     </tr>
                 </thead>
                 <tbody>
-                    {values.map((product, index) => {
-                        const stockInfo = getStockStatus(product.stock);
-                        return (
-                            <tr key={index} className="border-t">
-                                <td className="p-2">{product.name}</td>
-                                <td className="p-2">{product.price}$</td>
-                                <td className="p-2 flex gap-2 items-center">
-                                    <button
-                                        className="bg-gray-200 p-1 rounded"
-                                        onClick={() => updateStock(product.name, Math.max(0, product.stock - 1))}
-                                    >
-                                        -
-                                    </button>
-                                    {product.stock}
-                                    <button
-                                        className="bg-gray-200 p-1 rounded"
-                                        onClick={() => updateStock(product.name, product.stock + 1)}
-                                    >
-                                        +
-                                    </button>
-                                </td>
-                                <td className="p-2">{product.sold} pcs</td>
-                                <td className={`p-2 ${stockInfo.class}`}>{stockInfo.status}</td>
-                                <td className="p-2">
-                                    <TrashIcon
-                                        className="h-5 w-5 text-red-500 cursor-pointer hover:text-red-700"
-                                        onClick={() => handleDelete(product.name)}
-                                    />
-                                </td>
-                            </tr>
-                        );
-                    })}
+                    {values.map((product: any, index: any) => (
+                        <tr key={index} className="border-t">
+                            <td className="p-2">{product.name}</td>
+                            <td className="p-2">{product.price}$</td>
+                            <td className="p-2">
+                                <button
+                                    className="bg-gray-200 p-1 rounded"
+                                    onClick={() => handleModif(index, 'stock', Math.max(0, product.stock - 1))}
+                                >
+                                    -
+                                </button>
+                                {product.stock}
+                                <button
+                                    className="bg-gray-200 p-1 rounded"
+                                    onClick={() => handleModif(index, 'stock', product.stock + 1)}
+                                >
+                                    +
+                                </button>
+                            </td>
+                            <td className="p-2">
+                                <button
+                                    className="bg-gray-200 p-1 rounded"
+                                    onClick={() => handleModif(index, 'sold', Math.max(0, product.sold - 1))}
+                                >
+                                    -
+                                </button>
+                                {product.sold} pcs
+                                <button
+                                    className="bg-gray-200 p-1 rounded"
+                                    onClick={() => handleModif(index, 'sold', product.sold + 1)}
+                                >
+                                    +
+                                </button>
+                            </td>
+                            <td className={`p-2 ${getStockStatus(product.stock).class}`}>{getStockStatus(product.stock).status}</td>
+                            <td className="p-2">
+                                <TrashIcon
+                                    className="h-5 w-5 text-red-500 cursor-pointer hover:text-red-700"
+                                    onClick={() => handleDelete(index)}
+                                />
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

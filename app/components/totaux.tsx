@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 
-export default function Totaux({ sendDataToParent, newLabel, newProduct }: any) {
+export default function Totaux({ data }: any) {
   const [totaux, setTotaux] = useState<{
     visitors: number;
     platforms: number;
@@ -13,18 +13,18 @@ export default function Totaux({ sendDataToParent, newLabel, newProduct }: any) 
 
   const fetchValues = async () => {
     try {
-      const res = await fetch("/api/yearlies");
-      const data = await res.json();
+      const resDashboard = await fetch(`/api/dashboards/${data._id}`);
+      const dataDashboard = await resDashboard.json();
 
       // Calculer le total des visiteurs
-      const visitors = data.reduce((acc: number, item: any) => acc + item.value, 0);
+      const visitors = dataDashboard.yearlyVisitors.reduce((acc: number, item: any) => acc + item.value, 0);
 
       //Nbre de plateforme de vente
-      const platforms = data.length;
+      const platforms = dataDashboard.yearlyVisitors.length;
 
       setTotaux({ visitors, platforms });
 
-      sendDataToParent(data)
+      // sendDataToParent(data)
     } catch (error) {
       console.error("Error fetching yearlies:", error);
     }
@@ -32,7 +32,7 @@ export default function Totaux({ sendDataToParent, newLabel, newProduct }: any) 
 
   useEffect(() => {
     fetchValues();
-  }, [newLabel]);
+  }, [data]);
 
   const [sales, setSales] = useState<{
     totalSales: number;
@@ -44,17 +44,16 @@ export default function Totaux({ sendDataToParent, newLabel, newProduct }: any) 
 
   const fetchSales = async () => {
     try {
-      const resSale = await fetch("/api/bestSellings");
+      const resSale = await fetch(`/api/dashboards/${data._id}`);
       const dataSales = await resSale.json();
 
       // Calculer le total des ventes
-      const totalSales = dataSales.reduce((acc: number, item: any) => acc + item.sold, 0);
+      const totalSales = dataSales.bestSelling.reduce((acc: number, item: any) => acc + item.sold, 0);
 
-            // Calculer le total du chiffre d affaire
-      const totalSalesAmount = dataSales.reduce((acc: number, amount: any) => acc + amount.price * amount.sold, 0);
+      // Calculer le total du chiffre d affaire
+      const totalSalesAmount = dataSales.bestSelling.reduce((acc: number, amount: any) => acc + amount.price * amount.sold, 0);
 
-
-      setSales({totalSales, totalSalesAmount });
+      setSales({ totalSales, totalSalesAmount });
 
     } catch (error) {
       console.error("Error fetching bests:", error);
@@ -63,9 +62,9 @@ export default function Totaux({ sendDataToParent, newLabel, newProduct }: any) 
 
   useEffect(() => {
     fetchSales();
-  }, [newProduct]);
+  }, [data]);
 
-  
+
 
   return (
     // <div className="flex flex-col gap-4">

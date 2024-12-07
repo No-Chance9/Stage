@@ -16,7 +16,6 @@ import Totaux from "./totaux";
 import '../style/styles.css'
 import { CustomerGrowthChart } from "./customerGrowth";
 import { YearlyVisitorsChart } from "./yearlyVisitors";
-import  BestSelling  from "./bestSelling";
 import ButtonGroup from "./buttonGroup";
 import ButtonDl from "./buttonDownload";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
@@ -125,58 +124,3 @@ export const LogoIcon = () => {
     );
 };
 
-// Dummy dashboard component with content
-// export const Dashboard = () => {
-//     return (
-
-//         <div className="flex flex-wrap h-screen w-max ">
-//             <div className="w-full">
-//                 <Header />
-//             </div>
-//             <div className="grid grid-cols-7  w-full ">
-//                 <h1 className="font-bold p-4 ">Overview</h1>
-//                 <div className="w-60 justify-self-end col-start-6  p-4 col-end-7">
-//                     <ButtonGroup />
-//                 </div>
-//                 {/* <div className=" justify-self-start col-start-7 p-4 col-end-8 ">
-//                     <ButtonDl />
-//                 </div> */}
-//                 <div className=" justify-self-start col-start-7 p-4 col-end-8 ">
-                    
-//                 </div>
-//             </div>
-//             {/* overview */}
-//             <div className="rounded-tl-2xl dark:border-neutral-700 bg-gray dark:bg-neutral-900 flex flex-col gap-2 w-full h-fit">
-//                 <div className="flex gap-2 w-max flex-1 p-4">
-//                     {/* {[...new Array(4)].map((i) => ( */}
-//                         <div
-//                             key={"first-array"}
-//                             className="h-max w-max rounded-lg bg-gray-100 dark:bg-neutral-800 "
-//                         ><Totaux /></div>
-//                     {/* ))} */}
-//                 </div>
-//                 <div className="grid grid-col-3 grid-row-2 w-full gap-6 p-4 flex-1 overflow-hidden">
-//                     {/* {[...new Array(2)].map((i) => ( */}
-//                     <div
-//                         key={"second-array"}
-//                         className=" rounded-lg col-start-1 col-end-3  bg-gray-100 dark:bg-neutral-800 "
-//                     ><CustomerGrowthChart />
-//                     </div>
-//                     <div
-//                         key={"second-array"}
-//                         className=" rounded-lg col-start-3 col-end-4  bg-gray-100 dark:bg-neutral-800 flex-1 "
-//                     ><YearlyVisitorsChart />
-//                     </div>
-//                     <div
-//                         key={"second-array"}
-//                         className=" rounded-lg row-start-2 col-start-1 col-end-4 bg-gray-100 dark:bg-neutral-800 flex-1 "
-//                     ><BestSelling />
-//                     </div>
-//                     {/* ))} */}
-//                 </div>
-//             </div>
-//             {/* fin overview */}
-//         </div>
-
-//     );
-// };

@@ -4,7 +4,7 @@ import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import { MinusCircleIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-export const YearlyVisitorsChart = ({ sendDataToParent, sendLabelToparent }: any) => {
+export const YearlyVisitorsChart = ({ dashboardData }: any) => {
     const [chartData, setChartData] = useState<{
         labels: string[];
         visitors: number[];
@@ -23,24 +23,15 @@ export const YearlyVisitorsChart = ({ sendDataToParent, sendLabelToparent }: any
 
     const [error, setError] = useState(""); // Error message state
 
-    const fetchValues = async () => {
-        try {
-            const res = await fetch("/api/yearlies");
-            const data = await res.json();
-
-            const labels = data.map((item: any) => item.label);
-            const visitors = data.map((item: any) => item.value);
-
-            setChartData({ labels, visitors });
-            sendDataToParent(data);
-        } catch (error) {
-            console.error("Error fetching customers:", error);
-        }
-    };
 
     useEffect(() => {
-        fetchValues();
-    }, [newLabel, newVisitor]);
+        if (dashboardData?.yearlyVisitors) {
+            const labels = dashboardData.yearlyVisitors.map((item: any) => item.label);
+            const visitors = dashboardData.yearlyVisitors.map((item: any) => item.value);
+
+            setChartData({ labels, visitors });
+        }
+    }, [dashboardData]);
 
     const handleAddData = async () => {
         // Validation for inputs
@@ -57,12 +48,18 @@ export const YearlyVisitorsChart = ({ sendDataToParent, sendLabelToparent }: any
         setError("");
 
         try {
-            const response = await fetch("/api/yearlies", {
+            const response = await fetch(`/api/dashboards/${dashboardData._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ label: newLabel, value: Number(newVisitor) }),
+                body: JSON.stringify({
+                    type: 'yearlyVisitors',
+                    data: {
+                        label: newLabel.toLowerCase(),
+                        value: newVisitor,
+                    }
+                }),
             });
 
             if (!response.ok) {
@@ -72,30 +69,34 @@ export const YearlyVisitorsChart = ({ sendDataToParent, sendLabelToparent }: any
 
             const result = await response.json();
 
-            // Update the chart data with the newly added yearly data
-            setChartData((prevData) => ({
-                labels: [...prevData.labels, result.label],
-                visitors: [...prevData.visitors, result.value],
-            }));
+            console.log("Response from POST:", result);
 
-            sendLabelToparent(newLabel);
+                // Update the chart data with the newly added yearly data
+                setChartData((prevData) => ({
+                    labels: [...prevData.labels, result.label],
+                    visitors: [...prevData.visitors, result.value],
+                }));
 
-            // Clear input fields
-            setNewLabel("");
-            setNewVisitor("");
+                // Clear input fields
+                setNewLabel("");
+                setNewVisitor("");
         } catch (error: any) {
+            console.error("Error adding data:", error);
             setError(error.message);
         }
     };
 
     const handleDeleteLabel = async (label: string) => {
         try {
-            const response = await fetch("/api/yearlies", {
+            const response = await fetch(`/api/dashboards/${dashboardData._id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ label }),
+                body: JSON.stringify({
+                    type: 'yearlyVisitors',
+                    name: label,
+                }),
             });
 
             if (!response.ok) {
@@ -108,13 +109,13 @@ export const YearlyVisitorsChart = ({ sendDataToParent, sendLabelToparent }: any
                 visitors: prevData.visitors.filter((_, index) => prevData.labels[index] !== label), // Supprimer le visiteur correspondant
             }));
 
-            sendLabelToparent(newLabel);
+            // sendLabelToparent(newLabel);
         } catch (error) {
             console.error("Error deleting label:", error);
         }
     };
 
-    const data = {
+    const dataPie = {
         labels: chartData.labels,
         datasets: [
             {
@@ -216,7 +217,7 @@ export const YearlyVisitorsChart = ({ sendDataToParent, sendLabelToparent }: any
                 </div>
             )}
 
-            <Pie data={data}
+            <Pie data={dataPie}
             />
         </div>
     );

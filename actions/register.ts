@@ -1,6 +1,7 @@
 "use server";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import Dashboard from "@/models/Dashboard";
 import bcrypt from "bcryptjs";
 
 export const register = async (values: any) => {
@@ -16,6 +17,7 @@ export const register = async (values: any) => {
 
         await connectDB();
 
+        // Vérifier si l'utilisateur existe déjà
         const userFound = await User.findOne({ email });
         if (userFound) {
             return {
@@ -23,8 +25,10 @@ export const register = async (values: any) => {
             };
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10); // Hachage uniquement après validation
-        
+        // Hasher le mot de passe
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Créer un nouvel utilisateur
         const user = new User({
             name,
             email,
@@ -32,18 +36,35 @@ export const register = async (values: any) => {
             surname,
         });
 
+        // Créer un Dashboard vide pour cet utilisateur
+        const dashboard = new Dashboard({
+            userId: user._id, // Lier le dashboard à l'utilisateur
+            totaux: { visitors: 0, platforms: 0 },
+            customerGrowthData: [],
+            yearlyVisitors: [],
+            bestSelling: [],
+        });
+
+        // Sauvegarder le Dashboard
+        await dashboard.save();
+
+        // Lier le Dashboard à l'utilisateur
+        user.dashboard = dashboard._id;
+        
+
+        // Sauvegarder l'utilisateur
         await user.save();
 
         return { success: true };
     } catch (error: any) {
         console.error("Error during registration:", error);
 
-        // Vérifier si c'est une erreur de validation Mongoose
+        // Gérer les erreurs de validation Mongoose
         if (error.name === "ValidationError") {
             const errors = Object.values(error.errors).map(
                 (err: any) => err.message
             );
-            return { error: errors.join(", ") }; // Retourner tous les messages d'erreur
+            return { error: errors.join(", ") };
         }
 
         // Autres erreurs
