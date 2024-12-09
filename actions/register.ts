@@ -2,6 +2,7 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import Dashboard from "@/models/Dashboard";
+import Notification from "@/models/Notification";
 import bcrypt from "bcryptjs";
 
 export const register = async (values: any) => {
@@ -51,6 +52,15 @@ export const register = async (values: any) => {
         // Lier le Dashboard à l'utilisateur
         user.dashboard = dashboard._id;
         
+        //Creer une collection Notifications pour l'user
+        const notifications = new Notification({
+            userId: user._id, // Lier la collection à l'utilisateur
+            notifications:[],
+        })
+
+        await notifications.save();
+
+        user.notification = notifications._id;
 
         // Sauvegarder l'utilisateur
         await user.save();

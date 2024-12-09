@@ -14,6 +14,7 @@ export interface UserDocument {
     code: number;
     dashboard?: mongoose.Types.ObjectId
     profilePicture?: mongoose.Types.ObjectId;
+    notification?: mongoose.Types.ObjectId;
     resetPasswordToken: string;
     resetPasswordExpires: Date | null;
     createdAt: Date;
@@ -76,6 +77,10 @@ const UserSchema = new Schema<UserDocument>({
     dashboard: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'dashboard',
+    },//Ref du dashboard perso
+    notification: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'notification',
     },//Ref du dashboard perso
     resetPasswordToken: {
         type: String,

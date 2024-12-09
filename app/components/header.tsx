@@ -1,7 +1,6 @@
 'use client'
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, Cog6ToothIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
 import Image from 'next/image';
@@ -9,11 +8,12 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useFormSubmitContext } from '@/app/components/FormSubmitContext';
 
-
 export default function Header() {
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
     const [isImageHidden, setIsImageHidden] = useState(true);
+
+    const [notifications, setNotifications] = useState([]);
 
     const router = useRouter();
 
@@ -22,6 +22,7 @@ export default function Header() {
     const { data: session } = useSession();
 
     const user = session?.user;
+    console.log('header user', user);
 
     const { formSubmitFromChildren } = useFormSubmitContext();
 
@@ -67,7 +68,58 @@ export default function Header() {
         }
     }, [formSubmitFromChildren]);
 
+    useEffect(() => {
+        if (formSubmitFromChildren.length > 0) {
+            fetch(`/api/notifications/${user?.notification}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    notifications: formSubmitFromChildren
+                }),
+            })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Failed to save notifications.");
+                }
+                return res.json();
+            })
+            .then((data) => {
+                // On inverse le sens du tableau
+                const notificationsReverse = data.notifications.reverse()
 
+                setNotifications(notificationsReverse); // Mettre à jour les notifications à partir de la réponse
+            })
+            .catch((err) => console.error("Failed to save notifications:", err));
+        }
+    }, [formSubmitFromChildren]);
+
+    useEffect(() => {
+        const fetchNotif = async () => {
+            try {
+                if (!user?.notification) {
+                    console.error("Notification ID is missing.");
+                    return;
+                }
+    
+                const res = await fetch(`/api/notifications/${user.notification}`);
+    
+                if (!res.ok) {
+                    throw new Error(`Failed to fetch notifications: ${res.status}`);
+                }
+    
+                const data = await res.json();
+    
+                // Extraire les notifications et mettre à jour l'état
+                setNotifications(data.notifications || []);
+                console.log("Notifications fetched:", data.notifications);
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        };
+    
+        // Appel de `fetchNotif` lors du démarrage ou de la modification de `formSubmitFromChildren`
+        fetchNotif();
+    }, [formSubmitFromChildren, user?.notification]);
 
     return (
         <Disclosure as="nav" className="bg-white border border-transparent border-l-slate-50">
@@ -112,8 +164,8 @@ export default function Header() {
                             {isNotificationOpen && (
                                 <div className="absolute right-0 mt-2 w-64 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                                     <ul className="max-h-48 overflow-y-auto">
-                                        {formSubmitFromChildren.length > 0 ? (
-                                            formSubmitFromChildren.map((notification, index) => (
+                                        {notifications.length > 0 ? (
+                                            notifications.map((notification, index) => (
                                                 <li
                                                     key={index}
                                                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-b-2"

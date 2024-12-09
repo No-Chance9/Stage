@@ -10,6 +10,7 @@ declare module "next-auth" {
             image?: string | null;
             role?: string | null;
             profilePicture?: number | null;
+            notification?: number | null;
         };
     }
 
@@ -20,6 +21,6 @@ declare module "next-auth" {
         image?: string | null;
         role?: string | null;
         profilePicture?: number | null;
-
+        notification?: number | null;
     }
 }

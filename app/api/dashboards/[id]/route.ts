@@ -51,7 +51,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
                     { status: 400 }
                 );
             }
-            const existingVisitor = dashboard.yearlyVisitors.find((item: any) => item.label === data.label);
+            const existingVisitor = dashboard.yearlyVisitors.find((item: any) => item.label.toLowerCase() === data.label.toLowerCase());
             if (existingVisitor) {
                 return NextResponse.json({ error: "Label already exists" }, { status: 400 });
             }
@@ -116,6 +116,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         }
 
         const targetArray = dashboard[type];
+        
         if (!Array.isArray(targetArray)) {
             return NextResponse.json({ error: "Invalid type or structure" }, { status: 400 });
         }

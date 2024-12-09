@@ -1,5 +1,4 @@
 import mongoose, { Schema, model } from "mongoose";
-import { validators } from "tailwind-merge";
 
 export interface DashboardDocument {
     _id: string;
@@ -23,7 +22,7 @@ const DashboardSchema = new Schema<DashboardDocument>({
     ],
     yearlyVisitors: [
         {
-            label: { type: String, required: true, unique: true }, // Le champ est requis
+            label: { type: String, required: true}, // Le champ est requis
             value: { type: Number, required: true }  // Le champ est requis
         }
     ],
@@ -40,8 +39,7 @@ const DashboardSchema = new Schema<DashboardDocument>({
 });
 
 // Ajouter un index pour renforcer l'unicité
-DashboardSchema.index({ 'yearlyVisitors.label': 1 }, { unique: true });
-
+// DashboardSchema.index({ 'yearlyVisitors.label': 1 }, { unique: true });
 
 const Dashboard = mongoose.models.Dashboard || model<DashboardDocument>("Dashboard", DashboardSchema);
 export default Dashboard;

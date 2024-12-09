@@ -56,7 +56,7 @@ export const YearlyVisitorsChart = ({ dashboardData }: any) => {
                 body: JSON.stringify({
                     type: 'yearlyVisitors',
                     data: {
-                        label: newLabel.toLowerCase(),
+                        label: newLabel,
                         value: newVisitor,
                     }
                 }),

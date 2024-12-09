@@ -30,6 +30,7 @@ export const authOptions: NextAuthOptions = {
                     email: user.email,
                     role: user.role,
                     profilePicture: user.profilePicture,
+                    notification: user.notification,
                     // Add other fields as needed, excluding sensitive fields like `password`
                 };
             },
@@ -40,6 +41,7 @@ export const authOptions: NextAuthOptions = {
     },
     callbacks: {
         async session({ session, token }) {
+            console.log("Session callback token:", token); // Ajoutez ce log
             // Add custom properties from the user token to the session
             session.user = {
                 ...session.user,
@@ -48,6 +50,7 @@ export const authOptions: NextAuthOptions = {
                 email: token.email,
                 role: token.role as string,
                 profilePicture: token.profilePicture as number,
+                notification: token.notification as number,
                 // Add any other user data you want to include in the session
             };
             return session;
@@ -60,6 +63,7 @@ export const authOptions: NextAuthOptions = {
                 token.email = user.email;
                 token.role = user.role;
                 token.profilePicture = user.profilePicture;
+                token.notification = user.notification;
                 // Include any other fields you want to keep in the token
             }
             return token;
