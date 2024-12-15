@@ -173,9 +173,9 @@ export default function UserManagementTable({ sendDataToParent }: any) {
     <>
       <div className='flex justify-between m-6 '>
         <p className='self-center font-bold'>Gestion des utilisateurs</p>
-        <div className=''>
+        {/* <div className=''>
           <ButtonEdit />
-        </div>
+        </div> */}
       </div>
       <div className="overflow-x-auto grid m-6">
         <div className='flex bg-white justify-between p-4'>

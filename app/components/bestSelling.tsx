@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-export default function BestSelling({ data, setformSubmitFromChildren}: any) {
+
+export default function BestSelling({ data, setformSubmitFromChildren }: any) {
     const [values, setValues] = useState<
         Array<{
             name: string;
@@ -142,13 +143,34 @@ export default function BestSelling({ data, setformSubmitFromChildren}: any) {
             if (setformSubmitFromChildren) {
                 setformSubmitFromChildren(newProduct.name);
             }
-            
+
             // Fermeture du formulaire
             // setIsFormOpen(false); 
 
         } catch (err: any) {
-            setError(err.message || "An unexpected error occurred.");        }
+            setError(err.message || "An unexpected error occurred.");
+        }
     };
+
+    // Fonction pour récupérer les valeurs depuis le backend
+    // const fetchValues = async () => {
+    //     try {
+    //         const response = await fetch(`/api/dashboards/${data._id}`);
+    //         if (!response.ok) {
+    //             throw new Error("Failed to fetch values.");
+    //         }
+
+    //         const fetchedData = await response.json();
+    //         setValues(fetchedData.bestSelling || []);
+    //     } catch (err) {
+    //         console.error("Error fetching values:", err);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchValues();
+    // }, [data]);
+
     return (
         <div className="bg-white shadow-md rounded-lg p-5">
             <div className="flex justify-between mb-4">

@@ -9,7 +9,7 @@ export interface ProfilePictureDocument {
     description?: string;
 }
 
-const ProfilePictureSchema = new mongoose.Schema<ProfilePictureDocument>({
+const ProfilePictureSchema = new Schema<ProfilePictureDocument>({
     fileName: { type: String, required: true },
     path: { type: String, required: true },
     uploadDate: { type: Date, default: Date.now },

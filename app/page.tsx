@@ -16,7 +16,7 @@ export default function Home() {
   const showSession = () => {
     if (status === "authenticated") {
       console.log('etat use session:', useSession());
-      router.push("/authentified/dashboard")
+      router.push("/authentified/user/dashboard")
       return (
         <>
           <button

@@ -5,11 +5,13 @@ import { SidebarUse } from "./components/sidebarUse";
 import Header from "./components/header";
 import { Provider } from  "./provider";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+
+const interSans = localFont({
+  src: "./fonts/Inter/static/Inter_18pt-Regular.ttf",
+  variable: "--font-inter-sans",
+  weight: "400",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -30,7 +32,7 @@ export default function RootLayout({
     <html lang="en">
       <Provider>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased inter.className`}
+          className={`${interSans.variable} ${geistMono.variable} antialiased inter.className`}
         >
             {/* <SidebarUse > */}
                 {/* <Header /> */}

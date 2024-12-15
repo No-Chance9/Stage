@@ -244,9 +244,9 @@ export default function Attribution() {
     <>
       <div className="flex justify-between m-6">
         <h1 className="font-bold text-2xl mb-4">Gestion des utilisateurs</h1>
-        <div className=''>
+        {/* <div className=''>
           <ButtonEdit />
-        </div>
+        </div> */}
       </div>
 
       <div className="overflow-x-auto grid m-6">
@@ -257,7 +257,7 @@ export default function Attribution() {
               :
               (<Image src='/images/Union.svg' alt="avatar" width={191} height={191} className="rounded-full " />)}
           </div>
-          <UploadForm />
+          {/* <UploadForm /> */}
           <div className="max-w-md mx-auto p-6">
             <form onSubmit={handleSave} className="space-y-4">
               <div>
@@ -270,7 +270,7 @@ export default function Attribution() {
                   value={modifs.role || values.role} // Utiliser `modifs.role` pour le contrôle
                 >
                   <option value='Admin'>Admin</option>
-                  <option value='Editeur'>Editeur</option>
+                  <option value='User'>User</option>
                   <option value='Observateur'>Observateur</option>
                 </select>
               </div>

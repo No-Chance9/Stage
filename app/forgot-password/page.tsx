@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
-    const [showHomeButton, setShowHomeButton] = useState(false); // État pour afficher le bouton
-    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,7 +31,6 @@ export default function ForgotPassword() {
 
             if (response.ok) {
                 setMessage("Un email a été envoyé à votre adresse.");
-                setShowHomeButton(true); // Afficher le bouton pour rediriger
             } else {
                 setMessage(result.error || "Une erreur est survenue.");
             }
@@ -41,10 +38,6 @@ export default function ForgotPassword() {
             console.error("Erreur lors de l'envoi :", error);
             setMessage("Une erreur est survenue.");
         }
-    };
-
-    const handleGoHome = () => {
-        router.push("/");
     };
 
     return (
@@ -75,16 +68,6 @@ export default function ForgotPassword() {
                 </button>
                 {message && <p className="text-center text-sm text-green-600 mt-4">{message}</p>}
             </form>
-
-            {/* Bouton de redirection affiché uniquement si `response.ok` */}
-            {showHomeButton && (
-                <button
-                    onClick={handleGoHome}
-                    className="mt-4 bg-indigo-500 text-white font-bold py-2 px-4 rounded hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
-                >
-                    Retour à l'accueil
-                </button>
-            )}
         </div>
     );
 }

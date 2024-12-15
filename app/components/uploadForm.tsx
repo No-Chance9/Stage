@@ -1,18 +1,22 @@
 // components/UploadForm.tsx
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useSession } from "next-auth/react";
 
 const UploadForm: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string>('');
     const [email, setEmail] = useState<string | null>(null);
+    const { data: session } = useSession();
+
+    const user = session?.user;
 
     // Récupère l'email depuis le local storage au montage du composant
     useEffect(() => {
-        const storedData = localStorage.getItem('selectedData');
-        if (storedData) {
-            const parsedData = JSON.parse(storedData);
-            setEmail(parsedData.email); // Assurez-vous que l'email est disponible
+        const emailFromSession = user?.email;
+        if (emailFromSession) {
+            setEmail(emailFromSession); // Assurez-vous que l'email est disponible
+            console.log('localsto',emailFromSession)
         } else {
             setUploadStatus('Email not found in local storage');
         }

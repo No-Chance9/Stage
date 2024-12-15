@@ -16,6 +16,34 @@ export const register = async (values: any) => {
             };
         }
 
+        // Vérifiez si le mot de passe contient au moins une lettre majuscule
+        if (!/[A-Z]/.test(password)) {
+            return {
+                error: "Password must contain at least one uppercase letter",
+            };
+        }
+
+        // Vérifiez si le mot de passe contient au moins une lettre minuscule
+        if (!/[a-z]/.test(password)) {
+            return {
+                error: "Password must contain at least one lowercase letter",
+            };
+        }
+
+        // Vérifiez si le mot de passe contient au moins un chiffre
+        if (!/\d/.test(password)) {
+            return {
+                error: "Password must contain at least one number",
+            };
+        }
+
+        // Vérifiez si le mot de passe contient au moins un caractère spécial
+        if (!/[@$!%*?&#]/.test(password)) {
+            return {
+                error: "Password must contain at least one special character (@, $, !, %, *, ?, &, #)",
+            };
+        }
+
         await connectDB();
 
         // Vérifier si l'utilisateur existe déjà

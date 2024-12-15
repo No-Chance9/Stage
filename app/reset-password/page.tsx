@@ -1,7 +1,7 @@
 // app/reset-password/page.tsx
 "use client";
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ResetPassword() {
     const [password, setPassword] = useState("");
@@ -9,6 +9,8 @@ export default function ResetPassword() {
     const [message, setMessage] = useState("");
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
+    const [showHomeButton, setShowHomeButton] = useState(false); // État pour afficher le bouton
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -16,6 +18,7 @@ export default function ResetPassword() {
             setMessage("Passwords do not match.");
             return;
         }
+
 
         const response = await fetch("/api/auth/reset-password", {
             method: "POST",
@@ -26,11 +29,17 @@ export default function ResetPassword() {
         });
 
         const result = await response.json();
+
         if (response.ok) {
             setMessage("Your password has been reset successfully!");
+            setShowHomeButton(true); // Afficher le bouton pour rediriger
         } else {
             setMessage(result.error || "Something went wrong.");
         }
+    };
+
+    const handleGoHome = () => {
+        router.push("/login");
     };
 
     return (
@@ -68,6 +77,17 @@ export default function ResetPassword() {
                 </button>
                 {message && <p className="text-center text-sm text-green-600 mt-4">{message}</p>}
             </form>
+
+            {/* Bouton de redirection affiché uniquement si `response.ok` */}
+            {showHomeButton && (
+                <button
+                    onClick={handleGoHome}
+                    className="mt-4 bg-indigo-500 text-white font-bold py-2 px-4 rounded hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
+                >
+                    Retour à l'accueil
+                </button>
+            )}
+
         </div>
     );
 }

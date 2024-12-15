@@ -2,11 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from "next/navigation";
 import Image from 'next/image';
+import UploadForm from '@/app/components/uploadForm';
+import { useSession } from "next-auth/react";
+import { setConfig } from 'next/config';
+
 
 export default function YourProfile() {
     const searchParams = useSearchParams();
     const email = searchParams.get("email");
     const [userData, setUserData] = useState<any>({});
+
+    const { data: session } = useSession();
+
+    const user = session?.user;
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -40,10 +48,21 @@ export default function YourProfile() {
         fetchValues();
     }, [userData]);
 
+
+
     return (
-        <div className="flex justify-center items-center h-screen bg-indigo-50">
+        <div className="flex flex-col gap-8 justify-center items-center  bg-indigo-50   max-w-full box-border">
+            <div>
+                {photoProfil ?
+                    (<Image src={photoProfil} alt="avatar" width={191} height={191} className="rounded-full mt-4 max-w-full h-auto " />)
+                    :
+                    (<Image src='/images/Union.svg' alt="avatar" width={191} height={191} className="rounded-full max-w-full h-auto" />)}
+            </div>
+            <div>
+                <UploadForm />
+            </div>
             {userData ? (
-                <div className="bg-white shadow-md rounded-lg p-8 max-w-lg w-full">
+                <div className="bg-white shadow-md mb-4 rounded-lg p-8 max-w-lg w-full ">
                     <h1 className="text-2xl font-bold text-gray-800 mb-4">{userData.name}'s Profile</h1>
                     <div className="text-sm text-gray-600 space-y-3">
                         <div>

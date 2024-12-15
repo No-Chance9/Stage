@@ -20,40 +20,51 @@ import ButtonGroup from "./buttonGroup";
 import ButtonDl from "./buttonDownload";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
 import { ReactNode } from "react";
+import { useSession } from "next-auth/react";
 
 
-export const SidebarUse = ({children}: { children: ReactNode }) => {
+export const SidebarUse = ({ children }: { children: ReactNode }) => {
+    const { data: session } = useSession();
+    const userRole = session?.user?.role; // Récupérez le rôle de l'utilisateur
+
     const links = [
         {
             label: "Tableaux de bord",
-            href: "/authentified/dashboard",
+            href: "/authentified/user/dashboard",
             icon: (
-                <IconBrandTabler className="text-icon  dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-        },
-        {
-            label: "Gestion des utilisateurs",
-            href: "/authentified/gestion",
-            icon: (
-                <IconUserBolt className="text-icon hover:text-sky-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+                <Image src='/images/dashboard.svg' alt='' width={24} height={24} />
             ),
         },
         {
             label: "Support",
-            href: "/authentified/support",
+            href: "/authentified/user/support",
             icon: (
-                <IconArrowLeft className="text-icon hover:text-sky-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+                <Image src='/images/call.svg' alt='' width={24} height={24} />
             ),
         },
-        {
-            label: "Setting",
-            href: "#",
-            icon: (
-                <IconSettings className="text-icon hover:text-sky-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-        },
+        // {
+        //     label: "Setting",
+        //     href: "#",
+        //     icon: (
+        //         <IconSettings className="text-icon hover:text-sky-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        //     ),
+        // },
+
     ];
+
+    // Ajoutez le lien spécifique pour les administrateurs
+    if (userRole === "Admin") {
+        links.push({
+            label: "Gestion des utilisateurs",
+            href: "/authentified/gestion",
+            icon: (
+                <Image src='/images/gestion users.svg' alt='' width={24} height={24} />
+            ),
+        });
+    }
+
     const [open, setOpen] = useState(false);
+
     return (
         <div
             className={cn(
@@ -63,7 +74,7 @@ export const SidebarUse = ({children}: { children: ReactNode }) => {
         >
             <Sidebar open={open} setOpen={setOpen} animate={false}>
                 <SidebarBody className="justify-between gap-10 ">
-                    <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden p-5">
+                    <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden ">
                         {open ? <Logo /> : <LogoIcon />}
                         <div className="mt-8 flex flex-col gap-2">
                             {links.map((link, idx) => (
@@ -108,8 +119,8 @@ export const Logo = () => {
                 animate={{ opacity: 1 }}
                 className="font-medium text-black dark:text-white whitespace-pre flex"
             >
-                <Image src='/images/ziema.svg' alt='' width={194} height={39}/>
-                <Image src='/images/dark:light.svg' alt='' width={32} height={32}/>
+                <Image src='/images/ziema.svg' alt='' width={194} height={39} />
+                {/* <Image src='/images/dark:light.svg' alt='' width={32} height={32} /> */}
             </motion.span>
         </Link>
     );

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { connectDB } from '../../../lib/mongodb';
-import Image from '../../../models/ProfilePicture';
+import ProfilePicture from '../../../models/ProfilePicture';
 
 // Configuration du dossier de téléchargement
 const uploadDir = path.join(process.cwd(), 'public/photoProfil');
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 
     // Sauvegarder les métadonnées du fichier dans MongoDB
     try {
-        const newImage = await Image.create({
+        const newImage = await ProfilePicture.create({
             fileName: file.name,
             path: `/photoProfil/${file.name}`,
             description: description || '',
