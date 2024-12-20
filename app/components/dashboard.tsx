@@ -105,7 +105,7 @@ export const Dashboard = ({ setformSubmitFromChildren }: any) => {
     if (!dashboardData) return <p>Loading dashboard...</p>;
 
     return (
-        <main className="p-4 max-w-screen-xl mx-auto">
+        <main className="p-4  max-w-screen-xl mx-auto">
             <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
                 <h1 className="text-2xl font-bold">Overview</h1>
                 <div className="flex gap-4 mt-4 sm:mt-0">

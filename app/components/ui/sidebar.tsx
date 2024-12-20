@@ -89,7 +89,7 @@ export const DesktopSidebar = ({
     <>
       <motion.div
         className={cn(
-          " px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 bg-white w-max flex-shrink-0 p-0",
+          "sticky top-0 h-screen px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 bg-white w-max flex-shrink-0 p-0 ",
           className
         )}
         // animate={{
@@ -115,13 +115,13 @@ export const MobileSidebar = ({
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+          "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full "
         )}
         {...props}
       >
         <div className="flex justify-end z-20 w-full">
           <IconMenu2
-            className="text-neutral-800 dark:text-neutral-200"
+            className="text-neutral-800 dark:text-neutral-200 "
             onClick={() => setOpen(!open)}
           />
         </div>
@@ -132,7 +132,7 @@ export const MobileSidebar = ({
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-100%", opacity: 0 }}
               transition={{
-                duration: 0.3,
+                duration: 0.5,
                 ease: "easeInOut",
               }}
               className={cn(
@@ -146,7 +146,9 @@ export const MobileSidebar = ({
               >
                 <IconX />
               </div>
-              {children}
+              <div onClick={() => setOpen(!open)}>
+                {children}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

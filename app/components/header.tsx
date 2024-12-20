@@ -126,12 +126,14 @@ export default function Header() {
     }, [formSubmitFromChildren, user?.notification]);
 
     return (
-        <Disclosure as="nav" className="bg-white border border-transparent border-l-slate-50">
-            <div className="mx-auto px-2 sm:px-6 lg:px-8">
+        //Conteneur parent du menu deroultant
+        <Disclosure as="nav" className="bg-white border border-transparent border-l-slate-50 ">
+            <div className="mx-auto px-2 sm:px-6 lg:px-8 ">
                 <div className="relative flex h-16 items-center justify-between">
 
-                    {/* Left Side (Search bar) */}
                     <div className="relative flex items-center w-full max-w-xs">
+
+                        {/* //SearchBar non utilise pour le moment */}
                         {/* <input
                             type="text"
                             placeholder="Search or type a command"
@@ -141,7 +143,7 @@ export default function Header() {
 
                     {/* Right Side (Icons and Dropdowns) */}
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                        {/* Settings */}
+                        {/* Button de parametre Settings non utilise pour le moment */}
                         {/* <button
                             type="button"
                             className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -185,7 +187,7 @@ export default function Header() {
                             )}
                         </div>
 
-                        {/* Profile dropdown */}
+                        {/* Menu deroulant */}
                         <Menu as="div" className="relative ml-3">
                             <div>
                                 <MenuButton className="relative flex rounded-full bg-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2">

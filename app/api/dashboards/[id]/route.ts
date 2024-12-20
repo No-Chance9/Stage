@@ -47,7 +47,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
             }
             if (typeof data.value !== "number" || data.value < 0) {
                 return NextResponse.json(
-                    { error: "Visitors count must be a non-negative number." },
+                    { error: "Visitors count must be a non-negative number ." },
                     { status: 400 }
                 );
             }
@@ -66,21 +66,21 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
                     { status: 400 }
                 );
             }
-            if (typeof data.price !== "number" || data.price < 0 ) {
+            if (typeof data.price !== "number" || data.price < 0 || data.price === 0) {
                 return NextResponse.json(
-                    { error: "Price must be a non-negative number." },
+                    { error: "Price can't be zero or below." },
                     { status: 400 }
                 );
             }
-            if (typeof data.stock !== "number" || data.stock < 0) {
+            if (typeof data.stock !== "number" || data.stock < 0 || data.stock === 0) {
                 return NextResponse.json(
-                    { error: "Stock must be a non-negative number." },
+                    { error: "Stock can't be zero or below." },
                     { status: 400 }
                 );
             }
-            if (typeof data.sold !== "number" || data.sold < 0) {
+            if (typeof data.sold !== "number" || data.sold < 0 || data.sold === 0) {
                 return NextResponse.json(
-                    { error: "Sold count must be a non-negative number." },
+                    { error: "Sold count can't be zero or below." },
                     { status: 400 }
                 );
             }
@@ -116,7 +116,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         }
 
         const targetArray = dashboard[type];
-        
+
         if (!Array.isArray(targetArray)) {
             return NextResponse.json({ error: "Invalid type or structure" }, { status: 400 });
         }

@@ -40,7 +40,7 @@ export const YearlyVisitorsChart = ({ dashboardData }: any) => {
             return;
         }
         if (newVisitor === "" || newVisitor < 0) {
-            setError("Visitors count must be a non-negative number.");
+            setError("Visitors count must be a non-negative number .");
             return;
         }
 
@@ -71,15 +71,15 @@ export const YearlyVisitorsChart = ({ dashboardData }: any) => {
 
             console.log("Response from POST:", result);
 
-                // Update the chart data with the newly added yearly data
-                setChartData((prevData) => ({
-                    labels: [...prevData.labels, result.label],
-                    visitors: [...prevData.visitors, result.value],
-                }));
+            // Update the chart data with the newly added yearly data
+            setChartData((prevData) => ({
+                labels: [...prevData.labels, result.label],
+                visitors: [...prevData.visitors, result.value],
+            }));
 
-                // Clear input fields
-                setNewLabel("");
-                setNewVisitor("");
+            // Clear input fields
+            setNewLabel("");
+            setNewVisitor("");
         } catch (error: any) {
             console.error("Error adding data:", error);
             setError(error.message);
@@ -87,6 +87,11 @@ export const YearlyVisitorsChart = ({ dashboardData }: any) => {
     };
 
     const handleDeleteLabel = async (label: string) => {
+        const userConfirmed = window.confirm("Êtes-vous sûr de vouloir supprimer le label ?");
+        if (!userConfirmed) {
+            return; // Si l'utilisateur clique sur "Annuler", on sort de la fonction
+        }
+
         try {
             const response = await fetch(`/api/dashboards/${dashboardData._id}`, {
                 method: "DELETE",
@@ -158,7 +163,7 @@ export const YearlyVisitorsChart = ({ dashboardData }: any) => {
 
             {/* Conditionally render the form */}
             {isFormOpen && (
-                <div className="absolute top-30 right-60 bg-gray-50 shadow-lg rounded-md p-4 w-full z-10">
+                <div className="md:absolute max-w-24 static bg-gray-50 shadow-lg rounded-md p-4 w-full z-10">
                     {error && <p className="text-red-500 text-sm mb-2">{error}</p>} {/* Display error if exists */}
                     <div className="mb-2">
                         <label htmlFor="label" className="block text-sm font-medium text-gray-700">
@@ -197,7 +202,7 @@ export const YearlyVisitorsChart = ({ dashboardData }: any) => {
 
             {/* List of labels with trash icons */}
             {isDeleteFormOpen && (
-                <div className="absolute top-30 right-60 bg-gray-50 shadow-lg rounded-md p-4 w-full z-10">
+                <div className="md:absolute max-w-40 static  bg-gray-50 shadow-lg rounded-md p-4 w-full z-10">
                     <div className="mt-4">
                         <ul>
                             {chartData.labels.map((label, index) => (

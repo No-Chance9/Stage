@@ -51,7 +51,7 @@ export default function YourProfile() {
 
 
     return (
-        <div className="flex flex-col gap-8 justify-center items-center  bg-indigo-50   max-w-full box-border">
+        <div className="flex flex-col gap-8 h-screen items-center bg-indigo-50 max-w-full box-border">
             <div>
                 {photoProfil ?
                     (<Image src={photoProfil} alt="avatar" width={191} height={191} className="rounded-full mt-4 max-w-full h-auto " />)
@@ -89,6 +89,7 @@ export default function YourProfile() {
                             <span className="font-semibold text-gray-800">Role:</span> {userData.role}
                         </div>
                     </div>
+
                 </div>
             ) : (
                 <div className="text-gray-700">Loading...</div>

@@ -72,9 +72,9 @@ export const SidebarUse = ({ children }: { children: ReactNode }) => {
                 "h-full" // for your use case, use `h-screen` instead of `h-[60vh]`
             )}
         >
-            <Sidebar open={open} setOpen={setOpen} animate={false}>
+            <Sidebar open={open} setOpen={setOpen} animate={false} >
                 <SidebarBody className="justify-between gap-10 ">
-                    <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden ">
+                    <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden  ">
                         {open ? <Logo /> : <LogoIcon />}
                         <div className="mt-8 flex flex-col gap-2">
                             {links.map((link, idx) => (
@@ -101,7 +101,7 @@ export const SidebarUse = ({ children }: { children: ReactNode }) => {
                     </div> */}
                 </SidebarBody>
             </Sidebar>
-            <main className="w-max flex-1">
+            <main className="md:w-max md:flex-1 w-full">
                 {children}
             </main>
             {/* <Dashboard /> */}
@@ -112,7 +112,7 @@ export const Logo = () => {
     return (
         <Link
             href="#"
-            className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+            className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20 "
         >
             <motion.span
                 initial={{ opacity: 0 }}

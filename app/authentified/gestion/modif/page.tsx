@@ -34,6 +34,7 @@ export default function UserManagementTable({ sendDataToParent }: any) {
       const data = await res.json();
 
       // Fetch each profile picture based on profilePictureId
+      //Promise.all permet d’attendre que toutes les promesses passées dans un tableau soient résolues
       const usersWithImages = await Promise.all(
         data.map(async (user: any, index: number) => {
           let profilePictureUrl = "/images/Union.svg"; // Fallback URL if no profile picture
@@ -55,7 +56,7 @@ export default function UserManagementTable({ sendDataToParent }: any) {
             name: user.name,
             profilePictureUrl,
             email: user.email,
-            createdAt: user.createdAt || "05/12/2023", // Use a default if createdAt is missing
+            createdAt: user.createdAt || Date.now, // Use a default if createdAt is missing
             originalIndex: index, // Ajoutez l'index original
           };
         })
@@ -170,14 +171,14 @@ export default function UserManagementTable({ sendDataToParent }: any) {
   };
 
   return (
-    <>
+    <div className='w-full'>
       <div className='flex justify-between m-6 '>
         <p className='self-center font-bold'>Gestion des utilisateurs</p>
         {/* <div className=''>
           <ButtonEdit />
         </div> */}
       </div>
-      <div className="overflow-x-auto grid m-6">
+      <div className=" grid m-6 ">
         <div className='flex bg-white justify-between p-4'>
           <h1 className='self-center font-bold'>Vos users</h1>
           <div className='relative'>
@@ -192,72 +193,74 @@ export default function UserManagementTable({ sendDataToParent }: any) {
             />
           </div>
         </div>
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr className="w-full bg-white border-b">
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Rôle</th>
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Avatar</th>
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Email</th>
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Name</th>
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Créé le</th>
-              <th className="p-4 text-left font-semibold text-sm text-gray-400">Modifier</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedUsers.map((user, index) => {
-              const globalIndex = user.originalIndex; // Utilisez `originalIndex`
-              return (
-                <tr key={globalIndex} className="border-b hover:bg-gray-50">
-                  <td className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 "
-                    onClick={() => {
+        <div className="overflow-x-auto">
+          <table className="min-w-full  bg-white">
+            <thead>
+              <tr className="w-full bg-white border-b">
+                <th className="p-4 text-left font-semibold text-sm text-gray-400">Rôle</th>
+                <th className="p-4 text-left font-semibold text-sm text-gray-400">Avatar</th>
+                <th className="p-4 text-left font-semibold text-sm text-gray-400">Email</th>
+                <th className="p-4 text-left font-semibold text-sm text-gray-400">Name</th>
+                <th className="p-4 text-left font-semibold text-sm text-gray-400">Créé le</th>
+                <th className="p-4 text-left font-semibold text-sm text-gray-400">Modifier</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedUsers.map((user, index) => {
+                const globalIndex = user.originalIndex; // Utilisez `originalIndex`
+                return (
+                  <tr key={globalIndex} className="border-b hover:bg-gray-50 ">
+                    <td className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 "
+                      onClick={() => {
+                        sendDataToParent(user.name, user.email, globalIndex);
+                        window.location.href = "/authentified/gestion/user";
+                      }} >
+                      {user.role}
+                    </td>
+                    <td onClick={() => {
                       sendDataToParent(user.name, user.email, globalIndex);
                       window.location.href = "/authentified/gestion/user";
-                    }} >
-                    {user.role}
-                  </td>
-                  <td onClick={() => {
-                    sendDataToParent(user.name, user.email, globalIndex);
-                    window.location.href = "/authentified/gestion/user";
-                  }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
-                    <Image src={user.profilePictureUrl} alt="avatar" width={30} height={30} className="rounded-full border hover:border-blue-500" />
-                  </td>
-                  <td onClick={() => {
-                    sendDataToParent(user.name, user.email, globalIndex);
-                    window.location.href = "/authentified/gestion/user";
-                  }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
-                    {user.email}
-                  </td>
-                  <td onClick={() => {
-                    sendDataToParent(user.name, user.email, globalIndex);
-                    window.location.href = "/authentified/gestion/user";
-                  }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
-                    {user.name}
-                  </td>
-                  <td className="p-4 text-sm text-gray-800">{user.createdAt}</td>
-                  <td
-                    className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 flex gap-2">
-                    <a href="/authentified/gestion/user" onClick={() => {
+                    }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
+                      <Image src={user.profilePictureUrl} alt="avatar" width={30} height={30} className="rounded-full border hover:border-blue-500" />
+                    </td>
+                    <td onClick={() => {
                       sendDataToParent(user.name, user.email, globalIndex);
-                    }}>
-                      <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
-                    </a>
-                    <button onClick={() => {
-                      handleDelete(user.email);
-                    }}>
-                      <FiTrash2 className="text-red-500 cursor-pointer hover:text-red-700" />
-                    </button>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-          {/* Popup */}
-          {showPopup && (
-            <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-md z-50">
-              Utilisateur supprimé avec succes
-            </div>
-          )}
-        </table>
+                      window.location.href = "/authentified/gestion/user";
+                    }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
+                      {user.email}
+                    </td>
+                    <td onClick={() => {
+                      sendDataToParent(user.name, user.email, globalIndex);
+                      window.location.href = "/authentified/gestion/user";
+                    }} className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800">
+                      {user.name}
+                    </td>
+                    <td className="p-4 text-sm text-gray-800">{user.createdAt}</td>
+                    <td
+                      className="p-4 text-sm cursor-pointer hover:text-blue-500 text-gray-800 flex gap-2">
+                      <a href="/authentified/gestion/user" onClick={() => {
+                        sendDataToParent(user.name, user.email, globalIndex);
+                      }}>
+                        <FiEdit2 className="text-blue-500 cursor-pointer hover:text-blue-700" />
+                      </a>
+                      <button onClick={() => {
+                        handleDelete(user.email);
+                      }}>
+                        <FiTrash2 className="text-red-500 cursor-pointer hover:text-red-700" />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+            {/* Popup */}
+            {showPopup && (
+              <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-md z-50">
+                Utilisateur supprimé avec succes
+              </div>
+            )}
+          </table>
+        </div>
         <div className="flex justify-self-end justify-end items-center mt-4 bg-white">
           <button
             onClick={() => handlePageChange(1)}
@@ -304,6 +307,6 @@ export default function UserManagementTable({ sendDataToParent }: any) {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

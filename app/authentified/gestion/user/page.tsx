@@ -249,7 +249,7 @@ export default function Attribution() {
         </div> */}
       </div>
 
-      <div className="overflow-x-auto grid m-6">
+      <div className="overflow-x-auto grid m-6 ">
         <div className='flex flex-col bg-white justify-between items-center p-4'>
           <div>
             {values.profilePictureUrl ?

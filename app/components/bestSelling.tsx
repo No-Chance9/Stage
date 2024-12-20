@@ -14,6 +14,7 @@ export default function BestSelling({ data, setformSubmitFromChildren }: any) {
     >([]);
 
     const [isFormOpen, setIsFormOpen] = useState(false); // Contrôle de la visibilité du formulaire
+    
     const [newProduct, setNewProduct] = useState<{
         name: string;
         price: number | "";
@@ -71,6 +72,10 @@ export default function BestSelling({ data, setformSubmitFromChildren }: any) {
     };
 
     const handleDelete = async (index: number) => {
+        const userConfirmed = window.confirm("Êtes-vous sûr de vouloir supprimer le produit ?");
+        if (!userConfirmed) {
+            return; // Si l'utilisateur clique sur "Annuler", on sort de la fonction
+        }
         try {
             const response = await fetch(`/api/dashboards/${data._id}`, {
                 method: "DELETE",
@@ -101,7 +106,6 @@ export default function BestSelling({ data, setformSubmitFromChildren }: any) {
         //     setError("All fields are required and must be valid.");
         //     return;
         // }
-
         setError(null); // Clear errors
 
         try {
@@ -140,6 +144,7 @@ export default function BestSelling({ data, setformSubmitFromChildren }: any) {
             console.log("Submitted name:", newProduct.name); // Vérifiez que c'est une chaîne
             console.log("Setting formSubmitFromChildren:", newProduct.name);
 
+            //donnees envoye au contexte pour notification
             if (setformSubmitFromChildren) {
                 setformSubmitFromChildren(newProduct.name);
             }
@@ -172,7 +177,7 @@ export default function BestSelling({ data, setformSubmitFromChildren }: any) {
     // }, [data]);
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-5">
+        <div className="bg-white shadow-md rounded-lg overflow-x-auto  p-5 w-full ">
             <div className="flex justify-between mb-4">
                 <h3 className="text-xl font-semibold">Best Selling Products</h3>
                 <div
@@ -185,7 +190,7 @@ export default function BestSelling({ data, setformSubmitFromChildren }: any) {
             </div>
 
             {isFormOpen && (
-                <div className="bg-gray-100 p-4 rounded shadow">
+                <div className="bg-gray-100  md:max-w-max p-4 rounded shadow">
                     {error && <p className="text-red-500 mb-2">{error}</p>}
                     <input
                         type="text"
@@ -224,7 +229,7 @@ export default function BestSelling({ data, setformSubmitFromChildren }: any) {
                 </div>
             )}
 
-            <table className="min-w-full mt-4">
+            <table className="min-w-full  mt-4">
                 <thead>
                     <tr>
                         <th className="text-left p-2">Product Name</th>

@@ -65,7 +65,10 @@ const UserSchema = new Schema<UserDocument>({
     },
     phone: {
         type: Number,
-    },
+        validate: {
+            validator: (value: number) => value.toString().length <= 15, // Vérifie que le nombre a 10 chiffres maximum
+            message: "Code cannot be longer than 15 digits",
+        },    },
     avatar: {
         type: String,
     },
@@ -76,12 +79,14 @@ const UserSchema = new Schema<UserDocument>({
     },
     ville: {
         type: String,
-        maxlength: [30, "adresse can't be longer than 30 characters "], // Max 30 characters
+        maxlength: [30, "ville can't be longer than 30 characters "], // Max 30 characters
     },
     code: {
         type: Number,
-        maxlength: [10, "adresse can't be longer than 10 characters "], // Max 10 characters
-
+        validate: {
+            validator: (value: number) => value.toString().length <= 7, // Vérifie que le nombre a 7 chiffres maximum
+            message: "Code cannot be longer than 7 digits",
+        },
     },
     profilePicture: {
         type: mongoose.Schema.Types.ObjectId,

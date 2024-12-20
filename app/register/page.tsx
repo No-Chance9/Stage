@@ -31,12 +31,12 @@ export default function Register() {
                 <form
                     ref={ref}
                     action={handleSubmit}
-                    className="p-6 absolute bottom-60 w-full max-w-[500px] flex flex-col justify-between items-center gap-2
+                    className="p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-[500px] flex flex-col justify-between items-center gap-2
                     border border-solid border-black bg-white rounded-lg"
                 >
                     {error && <div className="text-red-600">{error}</div>}
                     <h1 className="flex justify-center mb-5 w-full text-2xl font-bold">Register</h1>
-                    <div className="flex flex-row flex-auto w-full gap-2">
+                    <div className="flex flex-col sm:flex-row flex-auto w-full gap-2">
                         <div className="flex flex-col flex-1">
                             <label className="text-sm">Name</label>
                             <input
